@@ -1,0 +1,63 @@
+.payment{
+    display: flex;
+    background-color: rgb(182, 255, 182);
+    height: 650px;
+}
+
+.paymentfrom{
+    background-color: white;
+    position: absolute;
+    right: 0;
+    height: 650px;
+    width: 800px;
+    text-align: center;
+}
+
+.paymentMethods{
+    max-width: 200px;
+    margin-left: 200px;
+    margin-top: 30px;
+}
+
+.paymentMethods div {
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 25px;
+  display: flex;
+  margin-top: 30px;
+}
+
+.paymentMethods img{
+    
+    width: 20px;
+}
+
+.cen{
+    margin-left: 20px;
+}
+
+.cen img{
+    margin-left: 90px;
+    margin-top: 10px;
+    padding: 20px;
+    height: 100px;
+}
+
+.manu{
+    margin-left: 70px;
+    margin-top: -80px;
+}
+
+.amount1 {
+    margin-left: -150px;
+  }
+
+.amount2{
+    margin-left: 80px;
+    margin-top: -23px;
+}
+
+
+.button{
+    margin-top: 50px;
+}
