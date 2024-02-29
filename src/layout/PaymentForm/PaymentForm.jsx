@@ -8,10 +8,13 @@ const PaymentForm = () => {
   const [formData, setFormData] = useState({
     amount: 1,
     userId: '',
-    menuItemsId: ''
+    menuItemsId: '',
+    username: '',
+    price: ''
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [product, setProduct] = useState({});
+  const [ user, setUser] = useState({})
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -29,6 +32,22 @@ const PaymentForm = () => {
     fetchProduct();
   }, [id]); 
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try{
+        const token1 = localStorage.getItem('token')
+        const response01 = await axios.get(`http://localhost:8889/auth/user`,{
+          headers: {Authorization: `Bearer ${token1}`}
+        })
+        setUser(response01.data)
+      }catch (error){
+        console.error('Error fetching product:', error)
+      }
+    }
+
+    fetchUser()
+  }, [id])
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -43,7 +62,9 @@ const PaymentForm = () => {
         productId: id,
         amount: formData.amount,
         userId: formData.userId,
-        menutemsId: formData.menuItemsId
+        menutemsId: formData.menuItemsId,
+        username: formData.username,
+        price: formData.price
       });
       setFormData(response1.data);
       console.log('Payment successful:', response1.data);
@@ -58,6 +79,7 @@ const PaymentForm = () => {
     <div className='payment'>
       <div className="paymentMethods">
         <label>เลือกวิธีการชำระเงิน:</label>
+        <p>{user.username}</p>
         <div>
           <input type="radio" id="COD" name="paymentMethod" className="radio theme-controller"value="COD" onChange={handleChange} />
           <label for="COD">ปลายทาง</label>
@@ -99,12 +121,21 @@ const PaymentForm = () => {
             <div className="amount2">
               <p>ราคารวม: {product.price * formData.amount}</p>
             </div>
+            <div className="prices">
+              <label htmlFor="price">price</label>
+              <input type="text" name='price' id='price' value={formData.price = product.price * formData.amount } onChange={handleChange} readOnly/>
+            </div>
+
           </div>
           <br /><br />
           <div className="userIds">
             <label htmlFor="userId">User ID:   </label>
             <input type="text" id="userId" name="userId" value={formData.userId} onChange={handleChange} />
           </div>
+          <div className="usernames">
+              <label htmlFor="username">name: </label>
+              <input type="text" name='username' id='username' value={formData.username} onChange={handleChange}/>
+            </div>
           <div className="button">
             <button type="submit" className="btn btn-outline btn-success">Pay Now</button>
           </div>

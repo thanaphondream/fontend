@@ -39,7 +39,7 @@ const userRouter = createBrowserRouter([
       { index: true, element: <UserHome /> },
       { path: '/new', element: <Produc /> },
       { path: '/product/:id', element: <ProductDetail /> }, 
-      { path: '/payment/:id', element: <PaymentForm/> } 
+      { path: '/payment/:id/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentForm/> } 
     ]
   }
 ]);
@@ -55,8 +55,7 @@ const adminRouter = createBrowserRouter([
     ),
     children: [
       { index: true, element: <UserHome /> }, // เรียกใช้ Admin component ที่นี่
-      { path: '/', element: <Admin/>}
-      // ลบเส้นทางที่ไม่เกี่ยวข้องออกไป
+      { path: '/Admin', element: <Admin/>},
     ]
   }
 ]);

@@ -12,7 +12,6 @@ const guestNav = [
 
 const userNav = [
   { to : '/', text: 'Home' },
-  // { to : '/new', text: 'New Todo' },
   {to : '/new', text: 'ร้านค้าแนะนำ'}
 ]
 

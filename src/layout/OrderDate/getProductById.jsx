@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useParams, Link } from 'react-router-dom'; 
 import './getProductById.css'
 
 export default function ProductDetail() {
   const [product, setProduct] = useState({});
-  const { id } = useParams();
+  const { id, userid } = useParams();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -48,7 +48,7 @@ export default function ProductDetail() {
         <hr />
         <hr />
         <br />
-        <Link to={`/payment/${product.id}`} className="btn btn-outline btn-success">
+        <Link to={`/payment/${product.id}/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`} className="btn btn-outline btn-success">
         <button>ชำระเงิน</button>
         </Link>
       </div>

@@ -2,6 +2,8 @@
     display: flex;
     background-color: rgb(182, 255, 182);
     height: 650px;
+    max-width: 6500px;
+    margin-left: 50px;
 }
 
 .paymentfrom{
@@ -9,8 +11,9 @@
     position: absolute;
     right: 0;
     height: 650px;
-    width: 800px;
+    width: 620px;
     text-align: center;
+    margin-left: -50px;
 }
 
 .paymentMethods{
@@ -33,11 +36,11 @@
 }
 
 .cen{
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .cen img{
-    margin-left: 90px;
+    margin-left: 40px;
     margin-top: 10px;
     padding: 20px;
     height: 100px;

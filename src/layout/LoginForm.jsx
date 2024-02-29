@@ -1,8 +1,11 @@
 import axios from 'axios'
 import {useState} from "react";
 import useAuth from '../hooks/useAuth'
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
+  const navigate = useNavigate()
   const { setUser } = useAuth()
   const [input, setInput] = useState({
     username : '', 
@@ -18,14 +21,21 @@ export default function LoginForm() {
       e.preventDefault()
       // validation
       const rs = await axios.post('http://localhost:8889/auth/login', input)
-      console.log(rs.data.token)
-      console.log(rs)
+      // console.log(rs.data.token)
+      // console.log(rs)
       localStorage.setItem('token', rs.data.token)
       const rs1 = await axios.get('http://localhost:8889/auth/me', {
         headers : { Authorization : `Bearer ${rs.data.token}` }
       })
-      console.log(rs1.data)
+      // console.log(rs1.data)
       setUser(rs1.data)
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      });
       
     }catch(err) {
       console.log( err.message)
