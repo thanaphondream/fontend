@@ -11,8 +11,8 @@ const guestNav = [
 ]
 
 const userNav = [
-  { to : '/', text: 'Home' },
-  {to : '/new', text: 'ร้านค้าแนะนำ'}
+  { to : '/', text: 'หน้าหลัก' },
+  {to : '/Usreproduck', text: 'รายการที่ซื้อ'}
 ]
 
 export default function Header() {

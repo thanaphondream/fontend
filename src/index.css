@@ -9,7 +9,11 @@
 }
 
 body{
-    background-color: rgb(254, 231, 170);
+    background: linear-gradient(90deg, rgb(253, 253, 153), rgb(255, 176, 247));
     
 }
 
+.Address{
+    margin-top: 20px;
+    margin-left: 240px;
+}

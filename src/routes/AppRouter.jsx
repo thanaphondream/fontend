@@ -4,11 +4,11 @@ import Header from '../layout/Header';
 import LoginForm from '../layout/LoginForm';
 import RegisterForm from '../layout/RegisterForm';
 import UserHome from '../layout/UserHome';
-import Produc from '../layout/produc/produc';
 import ProductDetail from '../layout/OrderDate/getProductById';
 import PaymentForm from '../layout/PaymentForm/PaymentForm';
 import Admin from '../Admin/Admin';
 import HeaderAdmin from '../layout/HeaderAdmin';
+import UserProduck from '../layout/UserProduck';
 
 const guestRouter = createBrowserRouter([
   {
@@ -37,7 +37,7 @@ const userRouter = createBrowserRouter([
     ),
     children: [
       { index: true, element: <UserHome /> },
-      { path: '/new', element: <Produc /> },
+      { path: '/Usreproduck', element: <UserProduck/>},
       { path: '/product/:id', element: <ProductDetail /> }, 
       { path: '/payment/:id/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentForm/> } 
     ]

@@ -2,8 +2,13 @@
     display: flex;
     background-color: rgb(182, 255, 182);
     height: 650px;
-    max-width: 6500px;
-    margin-left: 50px;
+    max-width: 850px;
+    margin-left: 20px;
+}
+
+.imgfile img{
+    height: 650px;
+    width: 630px;
 }
 
 .paymentfrom{
@@ -11,9 +16,10 @@
     position: absolute;
     right: 0;
     height: 650px;
-    width: 620px;
+    width: 850px;
     text-align: center;
     margin-left: -50px;
+    margin-right: 20px;
 }
 
 .paymentMethods{
@@ -36,31 +42,54 @@
 }
 
 .cen{
-    margin-left: 10px;
+    margin-left: 60px;
+}
+
+.menuname{
+    margin-top: -60px;
+    margin-left: 160px;
 }
 
 .cen img{
-    margin-left: 40px;
+    margin-left: 200px;
     margin-top: 10px;
     padding: 20px;
     height: 100px;
 }
 
 .manu{
-    margin-left: 70px;
-    margin-top: -80px;
+    margin-top: -25px;
+    margin-left: 550px;
 }
 
-.amount1 {
-    margin-left: -150px;
+.prices {
+    margin-left: 500px;
+    margin-top: -25px;
   }
 
-.amount2{
-    margin-left: 80px;
-    margin-top: -23px;
+.amount1{
+    margin-left: 60px;
 }
 
+.userIds{
+    margin-left: 190px;
+}
+
+.usernames{
+    margin-left: 550px;
+    margin-top: -20px;
+}
+
+.pay{
+    margin-left: 250px;
+    margin-top: 50px;
+}
+
+.Address{
+    margin-right: 60px;
+}
 
 .button{
+    margin-left: 100px;
     margin-top: 50px;
 }

@@ -5,7 +5,7 @@ import './getProductById.css'
 
 export default function ProductDetail() {
   const [product, setProduct] = useState({});
-  const { id, userid } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,17 +33,19 @@ export default function ProductDetail() {
 
   return (
     <div className="product-detail-container">
+      <div className='imgs'>
+      <img alt="" src={product.file} />
+      </div>
       <div className="boxs">
           <br /><br />
-        <h2>{product.ItemName}</h2>
-          <img src={product.file} alt="" />
         <hr />
+        <h2>ชื่อเมนู: {product.ItemName}</h2>
+        <br /><br />
         <p>คำอธิบาย: <br /> {product.description}</p>
         <br />
         <p>ราคา: {product.price}</p>
         <hr /><br />
         <button onClick={handleOrder}>สั่งซื้อ</button>
-        {/* เพิ่มลิงก์ไปยังหน้าชำระเงิน */}
         <br />
         <hr />
         <hr />

@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './CSS/UserHome.css'
 import Strer from "../potter/Proster"
-import { Link } from 'react-router-dom'; // นำเข้า Link จาก react-router-dom
+import { Link } from 'react-router-dom'; 
+import Prosterbelow from '../potter/prosterbelow';
 
 export default function UserHome() {
   const [menutems, setMenutems] = useState([]);
@@ -31,7 +32,7 @@ export default function UserHome() {
       </div>
       {menutems.map((item) => (
         <div key={item.id} className="product-item">
-          <Link to={`/product/${item.id}`}> {/* สร้างลิงค์ไปยังหน้าสินค้าโดยใช้ ID */}
+          <Link to={`/product/${item.id}`}>
             <img src={item.file} alt=""/>
             <h3 className="product-title">{item.ItemName}</h3>
             <p className="product-price">ราคา: {item.price}</p>
@@ -40,6 +41,9 @@ export default function UserHome() {
         </div>
       ))}
       <hr />
+      <div>
+      <Prosterbelow/>
+      </div>
     </div>
   );
 }

@@ -2,15 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './PaymentForm.css'
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const PaymentForm = () => {
+  const navigate = useNavigate()
   const { id } = useParams(); 
   const [formData, setFormData] = useState({
     amount: 1,
     userId: '',
     menuItemsId: '',
     username: '',
-    price: ''
+    price: '',
+    pay: '',
+    namemenu: ''
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [product, setProduct] = useState({});
@@ -53,9 +59,17 @@ const PaymentForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  
-
   const handleSubmit = async (e) => {
+
+    if(!formData.pay){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>'
+      });
+    }
+
     e.preventDefault();
     try {
       const response1 = await axios.post('http://localhost:8889/auth/payment', {
@@ -64,10 +78,29 @@ const PaymentForm = () => {
         userId: formData.userId,
         menutemsId: formData.menuItemsId,
         username: formData.username,
-        price: formData.price
+        price: formData.price,
+        pay: formData.pay,
+        namemenu: formData.namemenu
       });
       setFormData(response1.data);
       console.log('Payment successful:', response1.data);
+      if(response1.status === 200){
+        Swal.fire({
+          title: "Custom width, padding, color, background.",
+          width: 600,
+          padding: "3em",
+          color: "#716add",
+          background: "#fff url(/images/trees.png)",
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("https://media.tenor.com/Mwzug9zxYh0AAAAi/nyan-cat-every-nyan.gif")
+            left top
+            no-repeat
+          `
+        });
+        navigate('/')
+      }
+      
     } catch (error) {
       console.error('Error processing payment:', error);
       setErrorMessage('An error occurred while processing payment. Please try again later.');
@@ -77,26 +110,9 @@ const PaymentForm = () => {
 
   return (
     <div className='payment'>
-      <div className="paymentMethods">
-        <label>เลือกวิธีการชำระเงิน:</label>
-        <p>{user.username}</p>
-        <div>
-          <input type="radio" id="COD" name="paymentMethod" className="radio theme-controller"value="COD" onChange={handleChange} />
-          <label for="COD">ปลายทาง</label>
-          <img src="https://i.pinimg.com/564x/72/42/47/724247e8906287cb912e90f999420963.jpg" alt="COD" />
-        </div>
-        <div>
-          <input type="radio" id="BankTransfer" name="paymentMethod" value="BankTransfer" className="radio theme-controller"onChange={handleChange} />
-          <label for="BankTransfer">ธนาคาร</label>
-          <img src="https://i.pinimg.com/564x/ce/ff/26/ceff2672e54405aae07c0173304fc077.jpg" alt="Bank Transfer" />
-        </div>
-        <div>
-          <input type="radio" id="CreditCard" name="paymentMethod" value="CreditCard" className="radio theme-controller"onChange={handleChange} />
-          <label for="CreditCard">บัตรเครดิต/เดบิต</label>
-          <img src="https://i.pinimg.com/564x/91/6d/98/916d9851dde1de1424dc80307c709506.jpg" alt="Credit Card" />
-        </div>
+      <div className='imgfile'>
+      <img src={product.file} alt="" />
       </div>
-  
       <div className='paymentfrom'>
         <h2>Payment Form</h2>
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
@@ -105,8 +121,12 @@ const PaymentForm = () => {
             <br /><br />
             <img src={product.file} alt="" />
           </div>
+          <div className='menuname'>
+            <label htmlFor="namemenu">ชื่อเมนู : </label>
+            <input type="text" name='namemenu' id='namemenu' value={formData.namemenu = product.ItemName} onCanPlay={handleChange} readOnly/>
+          </div>
           <div className="manu">
-            <label htmlFor="menuItemsId">ชื่อเมนู :<strong> {product.ItemName }</strong>  MenuID:     </label>
+            <label htmlFor="menuItemsId">  MenuID:     </label>
             <input type="text" id="menuItemsId" name="menuItemsId" value={formData.menuItemsId = product.id} onChange={handleChange} readOnly />
           </div>
           <br />
@@ -118,27 +138,41 @@ const PaymentForm = () => {
               <label htmlFor="amount">Amount:  </label>
               <input type="number" id="amount" name="amount" value={formData.amount} onChange={handleChange} min="1" max="10" />
             </div>
-            <div className="amount2">
-              <p>ราคารวม: {product.price * formData.amount}</p>
-            </div>
             <div className="prices">
-              <label htmlFor="price">price</label>
+              <label htmlFor="price">price : </label>
               <input type="text" name='price' id='price' value={formData.price = product.price * formData.amount } onChange={handleChange} readOnly/>
             </div>
 
           </div>
           <br /><br />
           <div className="userIds">
-            <label htmlFor="userId">User ID:   </label>
-            <input type="text" id="userId" name="userId" value={formData.userId} onChange={handleChange} />
+            <label htmlFor="userId">User ID :   </label>
+            <input type="text" id="userId" name="userId" value={formData.userId = user.id}  onChange={handleChange} readOnly/>
           </div>
           <div className="usernames">
-              <label htmlFor="username">name: </label>
-              <input type="text" name='username' id='username' value={formData.username} onChange={handleChange}/>
+              <label htmlFor="username">UserName : </label>
+              <input type="text" name='username' id='username' value={formData.username = user.username} onChange={handleChange} readOnly/>
             </div>
+          <div className="Address">
+            <label htmlFor="Address">Address : </label>
+            <input type="text" id='Address' name='Address' value={user.Address} />
+          </div>
+          <div className="pay">
+          <select
+              name="pay"
+              value={formData.pay} 
+              onChange={handleChange}
+              className="select select-bordered w-full max-w-xs"
+            >
+              <option >เลือกวิธีชำระ</option>
+              <option value="ปลายทาง">ปลายทาง</option>
+              <option value="โอนจ่าย">โอนจ่าย</option>
+            </select>
+          </div>
           <div className="button">
             <button type="submit" className="btn btn-outline btn-success">Pay Now</button>
           </div>
+          
         </form>
       </div>
     </div>
