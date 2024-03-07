@@ -7,8 +7,9 @@ import UserHome from '../layout/UserHome';
 import ProductDetail from '../layout/OrderDate/getProductById';
 import PaymentForm from '../layout/PaymentForm/PaymentForm';
 import Admin from '../Admin/Admin';
-import HeaderAdmin from '../layout/HeaderAdmin';
+import HeaderAdmin from '../Admin/HeaderAdmin';
 import UserProduck from '../layout/UserProduck';
+import HomAdmin from '../Admin/homAdmin';
 
 const guestRouter = createBrowserRouter([
   {
@@ -49,13 +50,13 @@ const adminRouter = createBrowserRouter([
     path: '/',
     element: (
       <>
-        <HeaderAdmin /> {/* ใช้ HeaderAdmin ที่นี่ */}
+        <HeaderAdmin /> 
         <Outlet />
       </>
     ),
     children: [
-      { index: true, element: <UserHome /> }, // เรียกใช้ Admin component ที่นี่
-      { path: '/Admin', element: <Admin/>},
+      { index: true, element: <HomAdmin /> }, 
+      { path: '/Admin', element: <Admin/>}
     ]
   }
 ]);

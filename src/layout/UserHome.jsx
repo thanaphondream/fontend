@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import './CSS/UserHome.css'
 import Strer from "../potter/Proster"
 import { Link } from 'react-router-dom'; 
-import Prosterbelow from '../potter/prosterbelow';
 
 export default function UserHome() {
   const [menutems, setMenutems] = useState([]);
@@ -25,25 +24,29 @@ export default function UserHome() {
   }, []);
 
   return (
+    <div>
+      <Strer/>
     <div className="user-home-container">
       <div>
-        <Strer/>
-        <progress className="progress w-56"></progress>
       </div>
       {menutems.map((item) => (
         <div key={item.id} className="product-item">
           <Link to={`/product/${item.id}`}>
             <img src={item.file} alt=""/>
             <h3 className="product-title">{item.ItemName}</h3>
-            <p className="product-price">ราคา: {item.price}</p>
+            <p className="product-price">ราคา: {item.price} บาท</p>
           </Link>
+          <br />
+          <Link to={`/payment/${item.id}/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`} className="btn btn-outline btn-success">
+        <button>สั่งซื้อ</button>
+        </Link>
           <div className="button-group"></div>
         </div>
       ))}
       <hr />
       <div>
-      <Prosterbelow/>
       </div>
+    </div>
     </div>
   );
 }

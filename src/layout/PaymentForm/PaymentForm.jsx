@@ -4,7 +4,6 @@ import axios from 'axios';
 import './PaymentForm.css'
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 const PaymentForm = () => {
   const navigate = useNavigate()
@@ -60,17 +59,16 @@ const PaymentForm = () => {
   };
 
   const handleSubmit = async (e) => {
-
-    if(!formData.pay){
+    e.preventDefault();
+    if (formData.pay === "") {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-        footer: '<a href="#">Why do I have this issue?</a>'
+        title: "กรุณาเลือกวิธีชำระ",
+        text: "โปรดเลือกวิธีการชำระเงิน",
+        icon: "warning"
       });
+      return; 
     }
 
-    e.preventDefault();
     try {
       const response1 = await axios.post('http://localhost:8889/auth/payment', {
         productId: id,
@@ -86,19 +84,23 @@ const PaymentForm = () => {
       console.log('Payment successful:', response1.data);
       if(response1.status === 200){
         Swal.fire({
-          title: "Custom width, padding, color, background.",
-          width: 600,
-          padding: "3em",
-          color: "#716add",
-          background: "#fff url(/images/trees.png)",
-          backdrop: `
-            rgba(0,0,123,0.4)
-            url("https://media.tenor.com/Mwzug9zxYh0AAAAi/nyan-cat-every-nyan.gif")
-            left top
-            no-repeat
-          `
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            });
+            navigate('/')
+          }
         });
-        navigate('/')
       }
       
     } catch (error) {
@@ -164,7 +166,7 @@ const PaymentForm = () => {
               onChange={handleChange}
               className="select select-bordered w-full max-w-xs"
             >
-              <option >เลือกวิธีชำระ</option>
+              <option>เลือกวิธีชำระ</option>
               <option value="ปลายทาง">ปลายทาง</option>
               <option value="โอนจ่าย">โอนจ่าย</option>
             </select>
@@ -178,5 +180,6 @@ const PaymentForm = () => {
     </div>
   );
   
-  }
+}
+
 export default PaymentForm;

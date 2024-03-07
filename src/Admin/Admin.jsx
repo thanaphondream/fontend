@@ -7,7 +7,6 @@ export default function ProductForm() {
     ItemName: '',
     price: '',
     description: '',
-    restaurantsId: '',
     file: ''
   });
 
@@ -17,7 +16,7 @@ export default function ProductForm() {
 
   const hdlSubmit = async e => {
     try {
-      if(!input.ItemName || !input.price || !input.description || !input.restaurantsId || !input.file){
+      if(!input.ItemName || !input.price || !input.description || !input.file){
         return alert(`กรุณากรอกข้อความใหม่`)
       }
       e.preventDefault();
@@ -74,21 +73,6 @@ export default function ProductForm() {
           onChange={hdlChange}
         />
       </label>
-
-      <label className="form-control w-full">
-        <div className="label">
-          <span className="label-text">restaurantsId</span>
-        </div>
-        <input
-          type="number" 
-          placeholder="restaurantsId"
-          className="input input-bordered w-full"
-          name="restaurantsId"
-          value={input.restaurantsId}
-          onChange={hdlChange}
-        />
-      </label>
-
       <label className="form-control w-full">
         <div className="label">
           <span className="label-text">url</span>

@@ -45,13 +45,10 @@ export default function ProductDetail() {
         <br />
         <p>ราคา: {product.price}</p>
         <hr /><br />
-        <button onClick={handleOrder}>สั่งซื้อ</button>
-        <br />
-        <hr />
         <hr />
         <br />
         <Link to={`/payment/${product.id}/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`} className="btn btn-outline btn-success">
-        <button>ชำระเงิน</button>
+        <button>สั่งซื้อ</button>
         </Link>
       </div>
     </div>

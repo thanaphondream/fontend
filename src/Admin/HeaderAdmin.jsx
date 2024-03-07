@@ -6,7 +6,7 @@ const guestNav = [
 ]
 
 const userNav = [
-  { to : '/', text: 'Admin' }
+  { to : '/', text: '' }
 ]
 
 
@@ -27,13 +27,17 @@ export default function HeaderAdmin() {
     navigate('/Admin')
   }
 
+  const hdlhome = () => {
+    navigate('/')
+  }
+
   
 
   return (
     <ul>
     <div className="navbar bg-base-100">
     <div className="navbar-start">
-    <a className="btn btn-ghost text-xl">ADMIN</a>
+    <a className="btn btn-ghost text-xl" onClick={hdlhome}>ADMIN</a>
     </div>
     <div className="navbar-center hidden lg:flex ">
     <ul className="menu menu-horizontal px-1 ">
