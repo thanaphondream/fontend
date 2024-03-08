@@ -36,6 +36,7 @@ function UserProduck() {
       console.error('Error deleting menu purchase:', error);
     }
   };
+
   return (
 <div className='"flex flex-col justify-center items-center py-10'>
   <h2 className="text-2xl font-semibold mb-4">ข้อมูลการซื้อสินค้า</h2>
@@ -55,10 +56,11 @@ function UserProduck() {
         <button className='bg-red-500 text-white px-4 py-2 rounded-md' onClick={() => handleDelete(purchase.id)} >ยกเลิก</button>
        </div>
         </div>
-
+        {}
       </div>
     ))}
 </div>
+
 </div>
   );
 }

@@ -2,6 +2,7 @@ import {Link, useNavigate, Route} from 'react-router-dom'
 import useAuth from '../hooks/useAuth';
 import img69 from './img/image-131-edited.png'
 import './CSS/Header.css'
+import { Badge } from "antd"
 
 
 
@@ -25,7 +26,6 @@ export default function Header() {
     logout()
     navigate('/')
   }
-
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
@@ -38,7 +38,7 @@ export default function Header() {
         </ul>
         <ul className="menu menu-horizontal px-1">
           { user?.id && (
-            <li className='bg-red-500 text-white ml-[50rem]'>
+            <li className='bg-red-500 text-white ml-[52rem]'>
               <Link to='#' onClick={hdlLogout}>Logout</Link>
             </li>
           ) }

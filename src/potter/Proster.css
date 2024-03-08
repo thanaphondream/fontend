@@ -4,6 +4,7 @@
     display: flex;
     gap: 3rem;
     border: solid rgb(0, 0, 0) 2px;
+    border-radius: 5px;
 }
 
 .imgmenu img{

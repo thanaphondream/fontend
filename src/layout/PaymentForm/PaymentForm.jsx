@@ -68,48 +68,49 @@ const PaymentForm = () => {
       });
       return; 
     }
-
+  
     try {
-      const response1 = await axios.post('http://localhost:8889/auth/payment', {
-        productId: id,
-        amount: formData.amount,
-        userId: formData.userId,
-        menutemsId: formData.menuItemsId,
-        username: formData.username,
-        price: formData.price,
-        pay: formData.pay,
-        namemenu: formData.namemenu
-      });
-      setFormData(response1.data);
-      console.log('Payment successful:', response1.data);
-      if(response1.status === 200){
-        Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success"
+      Swal.fire({
+        title: "ต้องการที่จะชำระเงินหรือไม่",
+        text: "คุณต้องการที่จะดำเนินการชำระเงินหรือไม่",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ใช่, ฉันต้องการชำระเงิน",
+        cancelButtonText: "ไม่, ฉันไม่ต้องการชำระเงิน",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response1 = await axios.post('http://localhost:8889/auth/payment', {
+              productId: id,
+              amount: formData.amount,
+              userId: formData.userId,
+              menutemsId: formData.menuItemsId,
+              username: formData.username,
+              price: formData.price,
+              pay: formData.pay,
+              namemenu: formData.namemenu
             });
+            setFormData(response1.data);
+            console.log('Payment successful:', response1.data);
+            Swal.fire(
+              "ชำระเงินสำเร็จ!",
+              "คุณได้ทำการชำระเงินเรียบร้อยแล้ว",
+              "success"
+            );
             navigate('/')
+          } catch (error) {
+            console.error('Error processing payment:', error);
+            setErrorMessage('An error occurred while processing payment. Please try again later.');
           }
-        });
-      }
-      
+        }
+      });
     } catch (error) {
       console.error('Error processing payment:', error);
       setErrorMessage('An error occurred while processing payment. Please try again later.');
     }
   };
-  
-
   return (
     <div className='payment'>
       <div className='imgfile'>
