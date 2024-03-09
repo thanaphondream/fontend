@@ -12,7 +12,7 @@ function UserProduck() {
         const token = localStorage.getItem('token')
         const response = await axios.get(`http://localhost:8889/auth/purchases`, {
           headers: { Authorization: `Bearer ${token}` },
-          // params: { userId } 
+          params: { userId } 
         });
         setPurchases(response.data);
       } catch (error) {

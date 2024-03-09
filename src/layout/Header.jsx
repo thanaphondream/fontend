@@ -13,7 +13,8 @@ const guestNav = [
 
 const userNav = [
   { to : '/', text: 'หน้าหลัก' },
-  {to : '/Usreproduck', text: 'รายการที่ซื้อ'}
+  { to : '/Usreproduck', text: 'รายการที่ซื้อ' },
+  { to: '/cartorder', text: 'ตะกร้า'}
 ]
 
 export default function Header() {
@@ -38,7 +39,7 @@ export default function Header() {
         </ul>
         <ul className="menu menu-horizontal px-1">
           { user?.id && (
-            <li className='bg-red-500 text-white ml-[52rem]'>
+            <li className='bg-red-500 text-white ml-[45rem]'>
               <Link to='#' onClick={hdlLogout}>Logout</Link>
             </li>
           ) }

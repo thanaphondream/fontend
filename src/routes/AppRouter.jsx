@@ -10,6 +10,8 @@ import Admin from '../Admin/Admin';
 import HeaderAdmin from '../Admin/HeaderAdmin';
 import UserProduck from '../layout/UserProduck';
 import HomAdmin from '../Admin/homAdmin';
+import CartOrders from '../layout/CartOrder/CartOrders';
+import PaymentCart from '../layout/PaymentForm/PaymenfCart';
 
 const guestRouter = createBrowserRouter([
   {
@@ -40,7 +42,9 @@ const userRouter = createBrowserRouter([
       { index: true, element: <UserHome /> },
       { path: '/Usreproduck', element: <UserProduck/>},
       { path: '/product/:id', element: <ProductDetail /> }, 
-      { path: '/payment/:id/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentForm/> } 
+      { path: '/payment/:id/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentForm/> } ,
+      { path: '/cartorder', element: <CartOrders/>},
+      { path: '/payment/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentCart/>}
     ]
   }
 ]);
