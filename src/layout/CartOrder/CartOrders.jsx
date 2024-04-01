@@ -36,6 +36,7 @@ const CartOrders = () => {
             console.error(err)
         }
     }
+    console.log(Cartorders)
     return( 
         <div>
             <div>
