@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams} from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const PaymentCart = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const PaymentCart = () => {
         pay: '',
         namemenu: ''
       });
+      const navigate = useNavigate()
     const [errorMessage, setErrorMessage] = useState('');
     const [PaymenfCart, setPurchases] = useState([])
     const { UserId } = useParams()
@@ -81,14 +83,14 @@ const PaymentCart = () => {
                 // ส่งข้อมูลไปยังเซิร์ฟเวอร์ของคุณ
                 await Promise.all(PaymenfCart.map(async (item) => {
                   const response1 = await axios.post('http://localhost:8889/auth/payment', {
-                      productId: formData.productId,
+                      productId: item.menuItemsId,
                       amount: formData.amount,
                       userId: formData.userId,
                       menutemsId: formData.menuItemsId,
                       username: formData.username,
                       price: item.price * formData.amount,
                       pay: formData.pay,
-                      namemenu: formData.namemenu
+                      namemenu:  item.ItemName
                   });
                   console.log('Payment successful:', response1.data);
                 }));

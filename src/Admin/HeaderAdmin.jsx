@@ -31,6 +31,10 @@ export default function HeaderAdmin() {
     navigate('/')
   }
 
+  const hdMyGrach = () => {
+    navigate('/Grach')
+  }
+
   
 
   return (
@@ -42,7 +46,11 @@ export default function HeaderAdmin() {
     <div className="navbar-center hidden lg:flex ">
     <ul className="menu menu-horizontal px-1 ">
     <li><a onClick={hdlproduct}>Add Product</a></li>
-
+    </ul>
+    </div>
+    <div className="navbar-center hidden lg:flex ">
+    <ul className="menu menu-horizontal px-1 ">
+    <li><a onClick={hdMyGrach}>grach</a></li>
     </ul>
     </div>
     <div className="navbar-end">

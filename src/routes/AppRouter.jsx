@@ -12,6 +12,7 @@ import UserProduck from '../layout/UserProduck';
 import HomAdmin from '../Admin/homAdmin';
 import CartOrders from '../layout/CartOrder/CartOrders';
 import PaymentCart from '../layout/PaymentForm/PaymenfCart';
+import MyChart from '../Admin/Grach';
 
 const guestRouter = createBrowserRouter([
   {
@@ -60,7 +61,8 @@ const adminRouter = createBrowserRouter([
     ),
     children: [
       { index: true, element: <HomAdmin /> }, 
-      { path: '/Admin', element: <Admin/>}
+      { path: '/Admin', element: <Admin/>},
+      { path: '/Grach', element: <MyChart/>}
     ]
   }
 ]);
