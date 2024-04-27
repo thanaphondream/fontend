@@ -116,53 +116,60 @@ const PaymentCart = () => {
 
     return (
         <div>
-            <br /><br />
+          <br />
+          <h1 className='text-center'>ชำระเงิน</h1>
+            <br />
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <div>
             {PaymenfCart.map(paymenfcarts => ( 
-            <div key={paymenfcarts.id}>
+            <div key={paymenfcarts.id}  className="mb-8">
                 <hr /><br />
-            <div className='w-10'>
-                <img src={paymenfcarts.file} alt="" />
+            <div  className='w-20  mx-auto'>
+                <img src={paymenfcarts.file} alt="" className="rounded-lg block w-50" style={{ width: '500px' }}/>
             </div>
-          <div className='menuname'>
-            <label htmlFor="namemenu">ชื่อเมนู : </label>
-            <input type="text" name='namemenu' id='namemenu' value={formData.namemenu = paymenfcarts.ItemName} onCanPlay={handleChange} readOnly/>
-          </div>
-          <div className="manu">
-            <label htmlFor="menuItemsId">  MenuID:     </label>
-            <input type="text" id="menuItemsId" name="menuItemsId" value={formData.menuItemsId = paymenfcarts.menutemsId} onChange={handleChange} readOnly />
+            <br />
+          <div  className='flex flex-col text-center'>
+            <label htmlFor="namemenu" className="text-lg">ชื่อเมนู : </label>
+            <input type="text" name='namemenu' id='namemenu' value={formData.namemenu = paymenfcarts.ItemName} onCanPlay={handleChange} className="text-2xl font-bold text-center"  readOnly/>
           </div>
           <br />
+          <div className='menuItemsId text-center'>
+            <label htmlFor="menuItemsId" className="text-lg ">  MenuID:     </label>
+            <input type="text" id="menuItemsId" name="menuItemsId" value={formData.menuItemsId = paymenfcarts.menutemsId} onChange={handleChange}  className="border-2 border-gray-200 p-2 rounded-md mb-4 w-12"  readOnly />
+          </div>
           <br />
-          <br />
-          <div className="amounnts">
+          <div className="text-center">
             <div className="amount1">
-              <label htmlFor="amount">Amount:  </label>
-              <input type="number" id="amount" name="amount" value={formData.amount} onChange={handleChange} min="1" max="10" />
+              <label htmlFor="amount" className="text-lg ">Amount:  </label>
+              <input type="number" id="amount" name="amount" value={formData.amount} onChange={handleChange} min="1" max="10"  className="border-2 border-gray-200 p-2 rounded-md mb-4 w-20"/>
             </div>
-            <div className="prices">
-              <label htmlFor="price">price : </label>
-              <input type="text" name='price' id='price' value={formData.price = paymenfcarts.price * formData.amount} onChange={handleChange} readOnly/>
+            <br />
+            <div className=" text-center">
+              <label htmlFor="price" className=" text-center font-bold">price : </label>
+              <input className='w-9 font-bold  text-red-600' type="text" name='price' id='price' value={formData.price = paymenfcarts.price * formData.amount} onChange={handleChange} readOnly/>
             </div>
-
           </div>
           <br /><br />
-          <div className="userIds">
+          <div className="text-center">
             <label htmlFor="userId">User ID :   </label>
-            <input type="text" id="userId" name="userId" value={formData.userId = user.id}  onChange={handleChange} />
+            <input type="text" id="userId" name="userId" className='w-12' value={formData.userId = user.id}  onChange={handleChange} />
           </div>
           <br /><br />
-          <div className="usernames">
+          <div  className="text-center  ">
               <label htmlFor="username">UserName : </label>
-              <input type="text" name='username' id='username' value={formData.username = user.username} onChange={handleChange} />
+              <input className='w-16' type="text" name='username' id='username' value={formData.username = user.username} onChange={handleChange} />
             </div>
             </div>
             ))}
         </div>
         <br />
         <hr />
-        <div className="pay">
+        <br />
+        <div className="text-center">
+            
+        </div>
+        <br />
+        <div className="text-center">
           <select
               name="pay"
               value={formData.pay} 
@@ -174,7 +181,11 @@ const PaymentCart = () => {
               <option value="โอนจ่าย">โอนจ่าย</option>
             </select>
           </div>
-            <button onClick={handleSubmit} className="btn btn-outline btn-success">Pay Now</button>
+          <br />
+          <div className='text-center'>
+          <button onClick={handleSubmit} className="btn btn-outline btn-success">Pay Now</button>
+          </div>
+            
     </div>
 );
 }

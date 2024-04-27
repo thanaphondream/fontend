@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import 'boxicons'
 // import { connect } from 'react-redux';
 
 
@@ -37,6 +38,18 @@ const CartOrders = () => {
         }
     }
     console.log(Cartorders)
+
+    const prices = () => {
+        let totalPrice = 0;
+        Cartorders.forEach(cartorder => {
+            totalPrice += cartorder.price;
+        });
+        if(totalPrice === 0){
+            totalPrice = 'ไม่มีสินค้า'
+            
+        }
+        return totalPrice;
+    }
     return( 
         <div>
             <div>
@@ -60,14 +73,23 @@ const CartOrders = () => {
                         <td className="px-4 py-2 text-align: center text-center">{cartorder.ItemName}</td>
                         <td className="px-4 py-2 text-align: center white-space: nowrap">{cartorder.description}</td>
                         <td className="px-4 py-2 text-align: center text-center">{cartorder.price}</td>
-                        <button className='bg-red-500 text-white px-4 py-2 rounded-md' onClick={() => handleDelete(cartorder.id)}>ลบสินค้า</button>
+                        <button className='bg-red-500 text-white px-4 py-2 rounded-md' onClick={() => handleDelete(cartorder.id)}>
+                            <box-icon type='solid' name='message-square-x'></box-icon>
+                        </button>
                     </tr>
                 </tbody>
                 ))}
             </table>
-            <Link to={`/payment/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`} className="btn btn-outline btn-success">
-                <button>สั่งซื้อ</button>
-            </Link>
+            <br />
+            <hr />
+            <br />
+            <h1 className='ml-[70rem] text-2xl font-bold'>ราคารวม: {prices()}</h1>
+            <br />
+            <div className='ml-[70rem]'>
+                <Link to={`/payment/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`} className="btn btn-outline btn-success">
+                    <button className='w-28'>สั่งซื้อ</button>
+                </Link>
+            </div>
             </div>        
         </div>
     )

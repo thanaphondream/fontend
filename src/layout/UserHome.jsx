@@ -4,6 +4,7 @@ import './CSS/UserHome.css';
 import Strer from '../potter/Proster';
 import { Link } from 'react-router-dom';
 import Prosterwash from '../potter/Prosterwash';
+import 'boxicons'
 
 export default function UserHome() {
   const [menutems, setMenutems] = useState([]);
@@ -51,11 +52,12 @@ export default function UserHome() {
             <br />
             <Link
               to={`/payment/${item.id}/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`}
-              className="btn btn-outline btn-success"
-            >
+              className="btn btn-outline btn-success">
+                <box-icon name='money-withdraw'></box-icon>
               <button>สั่งซื้อ</button>
             </Link>
             <button className="btn btn-accent" onClick={() => handleAddToCart(item.id)}>
+            <box-icon name='cart-add' ></box-icon>
               เพิ่มลงตะกร้า
             </button>
             <div className="button-group"></div>
