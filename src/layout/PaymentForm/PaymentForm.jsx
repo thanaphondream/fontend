@@ -1,186 +1,317 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './PaymentForm.css'
+import Modal from 'react-modal';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const PaymentForm = () => {
+  const location = useLocation();
+    const { product } = location.state || {};
+
+    console.log('Product received:', product);
+  
+    const [ user, setUser ] = useState([])
+    const [ locations, setLocations ] = useState([])
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [ locationId, setLocationId ] = useState([])
+    const [ lo, setLo ] = useState([])
+    const locationIds = localStorage.getItem('loca')
+    console.log("ffss",locationIds)
+    const user1 = localStorage.getItem('user')
+    const [ payments, setPayments ] = useState({
+      pay: '',
+  })
   const navigate = useNavigate()
-  const { id } = useParams(); 
-  const [formData, setFormData] = useState({
-    amount: 1,
-    userId: '',
-    menuItemsId: '',
-    username: '',
-    price: '',
-    pay: '',
-    namemenu: ''
-  });
-  const [errorMessage, setErrorMessage] = useState('');
-  const [product, setProduct] = useState({});
-  const [ user, setUser] = useState({})
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:8889/auth/getproduct/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setProduct(response.data);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      }
-    };
-
-    fetchProduct();
-  }, [id]); 
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try{
-        const token1 = localStorage.getItem('token')
-        const response01 = await axios.get(`http://localhost:8889/auth/user`,{
-          headers: {Authorization: `Bearer ${token1}`}
-        })
-        setUser(response01.data)
-      }catch (error){
-        console.error('Error fetching product:', error)
-      }
-    }
-
-    fetchUser()
-  }, [id])
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.pay === "") {
-      Swal.fire({
-        title: "กรุณาเลือกวิธีชำระ",
-        text: "โปรดเลือกวิธีการชำระเงิน",
-        icon: "warning"
-      });
-      return; 
-    }
   
-    try {
-      Swal.fire({
-        title: "ต้องการที่จะชำระเงินหรือไม่",
-        text: "คุณต้องการที่จะดำเนินการชำระเงินหรือไม่",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "ใช่, ฉันต้องการชำระเงิน",
-        cancelButtonText: "ไม่, ฉันไม่ต้องการชำระเงิน",
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33"
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            const response1 = await axios.post('http://localhost:8889/auth/payment', {
-              productId: id,
-              amount: formData.amount,
-              userId: formData.userId,
-              menutemsId: formData.menuItemsId,
-              username: formData.username,
-              price: formData.price,
-              pay: formData.pay,
-              namemenu: formData.namemenu
-            });
-            setFormData(response1.data);
-            console.log('Payment successful:', response1.data);
-            Swal.fire(
-              "ชำระเงินสำเร็จ!",
-              "คุณได้ทำการชำระเงินเรียบร้อยแล้ว",
-              "success"
-            );
-            navigate('/')
-          } catch (error) {
-            console.error('Error processing payment:', error);
-            setErrorMessage('An error occurred while processing payment. Please try again later.');
-          }
+    useEffect(() => {
+      const Data_all = async () => {
+        try{
+          const token = localStorage.getItem('token')
+          const rsUser = await axios.get('http://localhost:8889/auth/user', {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          setUser(rsUser.data)
+  
+          const rslocation = await axios.get('http://localhost:8889/location/locationid', {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          setLocations(rslocation.data)
+          console.log("df",rslocation.data)
+  
+        }catch(err){
+          console.error(`เกิดข้อผิดพลาด ${err}`)
         }
-      });
-    } catch (error) {
-      console.error('Error processing payment:', error);
-      setErrorMessage('An error occurred while processing payment. Please try again later.');
-    }
-  };
-  return (
-    <div className='payment'>
-      <div className='imgfile'>
-      <img src={product.file} alt="" />
-      </div>
-      <div className='paymentfrom'>
-        <h2>Payment Form</h2>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="cen">
-            <br /><br />
-            <img src={product.file} alt="" />
-          </div>
-          <div className='menuname'>
-            <label htmlFor="namemenu">ชื่อเมนู : </label>
-            <input type="text" name='namemenu' id='namemenu' value={formData.namemenu = product.ItemName} onCanPlay={handleChange} readOnly/>
-          </div>
-          <div className="manu">
-            <label htmlFor="menuItemsId">  MenuID:     </label>
-            <input type="text" id="menuItemsId" name="menuItemsId" value={formData.menuItemsId = product.id} onChange={handleChange} readOnly />
-          </div>
-          <br />
-          <br />
-          <hr />
-          <br />
-          <div className="amounnts">
-            <div className="amount1">
-              <label htmlFor="amount">Amount:  </label>
-              <input type="number" id="amount" name="amount" value={formData.amount} onChange={handleChange} min="1" max="10" />
-            </div>
-            <div className="prices">
-              <label htmlFor="price">price : </label>
-              <input type="text" name='price' id='price' value={formData.price = product.price * formData.amount } onChange={handleChange} readOnly/>
-            </div>
+      }
+      Data_all()
+      locationIdShow()
 
-          </div>
-          <br /><br />
-          <div className="userIds">
-            <label htmlFor="userId">User ID :   </label>
-            <input type="text" id="userId" name="userId" value={formData.userId = user.id}  onChange={handleChange} readOnly/>
-          </div>
-          <div className="usernames">
-              <label htmlFor="username">UserName : </label>
-              <input type="text" name='username' id='username' value={formData.username = user.username} onChange={handleChange} readOnly/>
-            </div>
-          <div className="Address">
-            <label htmlFor="Address">Address : </label>
-            <input type="text" id='Address' name='Address' value={user.Address} />
-          </div>
-          <div className="pay">
-          <select
-              name="pay"
-              value={formData.pay} 
-              onChange={handleChange}
-              className="select select-bordered w-full max-w-xs"
-            >
-              <option>เลือกวิธีชำระ</option>
-              <option value="ปลายทาง">ปลายทาง</option>
-              <option value="โอนจ่าย">โอนจ่าย</option>
-            </select>
-          </div>
-          <div className="button">
-            <button type="submit" className="btn btn-outline btn-success">Pay Now</button>
-          </div>
-          
-        </form>
-      </div>
-    </div>
-  );
+    }, [])
   
-}
+    const openModal = () => setModalIsOpen(true);
+    const closeModal = () => setModalIsOpen(false);
+  
+    const model = () => {
+      return(
+        <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="เลือกที่อยู่"
+        style={{
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%',
+            maxWidth: '600px',
+          }
+        }}
+      >
+        <h2 className='text-center'>เลือกที่อยู่</h2>
+        {locations.length > 0 ? (
+         <div className='p-8'>
+           <ul>
+            {locations.map((location, index) => (
+              <li className='border border-sky-100 p-2' key={index} onClick={() => locationIdShow(location.id)}> 
+              จังหวัด {location.provinces}  
+              อำเภอ {location.amphures} 
+              ตำบล {location.districts} 
+              ถนน {location.road} 
+              หมู่บ้านที่ {location.village} 
+              บ้านเลขที่  {location.house_number} 
+              และอื่นๆ  {location.other} 
+              รหัสไปรษณีย์: {location.zip_code}</li>
+            ))}
+          </ul>
+         </div>
+        ) : (
+          <p>ยังไม่มีที่อยู่</p>
+        )}
+        <button onClick={closeModal}>ปิด</button>
+        <Link  to={`/location`}>
+              <button className="btn">เลือกข้อมูล</button>
+          </Link>
+      </Modal>
+      )
+    }
+  
+    const locationIdShow = async (los) => {
+      try{
+        console.log("fafa",los)
+        if(los){
+          const token = localStorage.getItem('token')
+        const rs = await axios.get(`http://localhost:8889/location/location/${los}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        setLocationId(rs.data)
+        setLo(rs.data.id)
+
+        }else{
+        const token = localStorage.getItem('token')
+        const rs = await axios.get(`http://localhost:8889/location/location/${locationIds}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        setLocationId(rs.data)
+        if (rs.data.userId == user1) {
+          setLo(rs.data.id);
+        } else {
+          setLo('');
+        }
+        }
+        closeModal()
+      }catch(err){
+        console.log(err)
+      }
+    }
+    
+    const ordersFn = async () => {
+      if(lo === '' || lo.length === 0){
+        Swal.fire({
+            title: "ไม่มีที่อยู่?",
+            text: "กรุณาใสที่อยู่ก่อน",
+            icon: "question"
+          });
+      }else if(payments.pay === ''){
+      Swal.fire({
+          title: "เลือกรายการชำระ?",
+          text: "เลือกรายการชำระเพื่อยืนยัน",
+          icon: "question"
+        });
+      }else{
+      try{
+        const rs = await axios.post('http://localhost:8889/order/orders', {
+          total_all: 1,
+          allprice: product.price,
+          status: 'รอยืนยันการสั้ง',
+          date: new Date(),
+        })
+  
+        await axios.post('http://localhost:8889/order/ordercart', {
+          total: 1,
+          all_price: product.price,
+          status: 'ordercart',
+          menutemsId: product.id,
+          userId: user1,
+          orderId: rs.data.order.id
+        })
+  
+        const rspy = await axios.post('http://localhost:8889/payment/payments', {
+          userId: user1,
+          amount: 1.0,
+          pay: 'paydelivery',
+          status: 'ชำระแล้ว',
+          locationId: lo,
+          orderId: rs.data.order.id
+        })
+        setPayments(rspy.data)
+        localStorage.setItem('loca', lo)
+        const token = localStorage.getItem('token')
+        await axios.get(`http://localhost:8889/payment/linemenu/${rspy.data.payment.id}`,{
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        navigate('/')
+      }catch(err){
+        console.error(err)
+      }
+    }
+    }
+  
+  
+    return(
+      <div>
+        <div className='flex-wrap flex content-center gap-10 justify-center p-1'>
+        <div className='bg-zinc-100 w-[48%] h-[8rem] p-2'>
+          <p className='ml-4 font-semibold'>ที่อยู่ในการจัดส่ง</p>
+          <p className='ml-4 font-medium'>{user.username}  {user.phon}</p>
+          <div className='ml-[35rem] -mt-10'>
+            <button className='bg-teal-300 rounded-lg ' onClick={openModal}>แก้ไขที่อยู่</button>
+          </div>  
+          {model()}
+          {locations.length ? (
+          <div className='m-5 font-medium'>
+            {locations.map((location, index) => (
+              <p key={index}></p>
+  
+            ))}
+            <p >จังหวัด {locationId.provinces} 
+              อำเภอ {locationId.amphures} 
+              ตำบล {locationId.districts} 
+              ถนน {locationId.road} 
+              หมู่บ้านที่ {locationId.village} 
+              บ้านเลขที่  {locationId.house_number} 
+              และอื่นๆ  {locationId.other} 
+              รหัสไปรษณีย์: {locationId.zip_code}</p>
+          </div>
+        ) : (
+          <div className='text-center mt-5'>
+            <p>ยังไม่มีที่อยู่</p>
+            <Link  to={`/location`}>
+              <button className="btn">เลือกข้อมูล</button>
+          </Link>
+          </div>
+        )}
+        </div>
+  
+        <div className='w-[30%] bg-zinc-100 '>
+          <p className='font-semibold ml-4 mt-2'>เลือกวิธีการชำระ</p>
+          <div className='p-5'>
+                    <div>
+        <div className='gap-4 '>
+        <label htmlFor="paydelivery"> 
+                <div className='w-full border object-cover border-slate-950 h-[5rem]  rounded-lg' >
+                    <div className='-p-5'>
+                        <input 
+                        type="radio" 
+                        id="paydelivery" 
+                        name="payment" 
+                        value="จ่ายเงินสด" 
+                        onChange={(e) => setPayments(prev => ({ ...prev, pay: e.target.value }))} 
+                    />
+                        </div>
+                    <div className='text-center'>
+                    <div className='flex ml-[32%]'>
+                    <box-icon name='money-withdraw' ></box-icon>
+                    <p className='font-medium'>จ่ายปลายทาง</p>
+                    </div>
+                    <p className='text-sm'>ชำระเงินเมื่อได้รับก๋วยเตี๋ยว</p>
+                    </div>
+                    </div>
+                </label>
+                <label htmlFor="transfer"> 
+                <div className='w-full border object-cover border-slate-950 h-[5rem]  rounded-lg mt-2' >
+                    <div className='-p-5'>
+                        <input 
+                            type="radio" 
+                            id="transfer" 
+                            name="payment" 
+                            value="โอนจ่าย" 
+                            onChange={(e) => setPayments(prev => ({ ...prev, pay: e.target.value }))} 
+                        />
+                    </div>
+                    <div className=''>
+                    <div className='flex ml-[32%]'>
+                    <box-icon name='transfer'></box-icon>
+                    <p className='font-medium text-sky-500'>โอนจ่าย</p>
+                    </div>
+                    <p className='text-sm ml-[29%] text-sky-400'>ชำระเงินเมื่อผ่านการโอน</p>
+                    </div>
+                    </div>
+                </label>
+        </div>
+        </div>
+          </div>
+
+          <div className='mt-4'>
+        <p className='font-semibold'>วิธีการการจัดส่ง</p>
+        <div className='ml-14 border border-slate-950 w-[15rem] h-[8rem] text-center p-[10%] m-5  rounded-lg'>
+        <h1 className='font-medium text-slate-950'>ส่งฟรี</h1>
+        <p className='text-sm'>ตั้งแต่ 15-30 ส.ค</p>
+      </div>
+        </div>
+        <div className=''>
+        <p className='font-semibold'>สรุปข้อมูลคำสั่งซื้อ</p>
+        <div className='p-5'>
+          <div className='flex-wrap flex gap-44'>
+          <div><p>ยอดรวม ({1} ชิ้น)</p></div>
+          <div><p>฿{product.price} </p></div>
+          </div>
+          <div className='flex-wrap flex gap-56 mt-5'>
+                  <div><p>ค่าจัดส่ง</p></div>
+                  <div><p>฿{0} </p></div>
+            </div>
+            <div className="border-b-2 border-sky-900 mt-5 mr-4"></div>
+            <div className='flex-wrap flex gap-44 mt-1'>           
+                    <div><p className='font-medium'>ยอดรวมทั้งสิ้น:</p></div>
+                    <div><p className='text-sky-900 font-medium'>฿{product.price} </p></div>
+            </div>
+        </div>
+        </div>
+      
+      <button className='btn btn-success w-full mt-2' onClick={ordersFn}>สั้งซื้อ</button>
+        </div>
+      </div>
+        <div  className='w-[48%] bg-zinc-100  ml-[10%] -m-[38%] '>
+        <div>
+        <h1 className='font-semibold'>เมนูรวมทั้งหมด {1} เมนู {1} จำนวน</h1>
+      </div>
+        <div>
+              <div className='flex overflow-x-auto  ml-4 gap-5 m-5'>
+                <br />
+                <img src={product.file} alt="" className="w-20 h-20"/>
+                <p className='text-sm'>{product.description}</p>
+                <p>฿{product.price}</p>
+                <p className='ml-10'>จำนวน {1}</p>
+                <br /><br />
+              </div>
+          </div>
+      </div>
+      </div>
+    )
+  }
 
 export default PaymentForm;
+
+

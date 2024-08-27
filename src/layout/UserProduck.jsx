@@ -1,98 +1,208 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import 'boxicons'
+import 'boxicons';
 import Swal from 'sweetalert2';
-import img from './img/แกง2-990x510-1.jpg'
 
 function UserProduck() {
   const [purchases, setPurchases] = useState([]);
+  const [expandedItem, setExpandedItem] = useState(null); // Track expanded item
   const { userId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token')
-        const response = await axios.get(`http://localhost:8889/auth/purchases`, {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:8889/payment/payment`, {
           headers: { Authorization: `Bearer ${token}` },
-          params: { userId } 
+          params: { userId }
         });
         setPurchases(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    }
+    };
 
     fetchData();
-  }, [userId]); 
+  }, [userId]);
 
   const createReceiptImage = (purchase) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 400;
-    canvas.height = 200;
-    ctx.shadowColor = '#888';
-    ctx.shadowBlur = 10;
-    ctx.fillStyle = "#d9faef";
-    ctx.fillRect(5, 5, canvas.width - 10, canvas.height - 10);
-    ctx.fillStyle = '#6894fc';
-    ctx.font = 'bold 14px Arial';
-    const em = "🧾"
-    const emoji = "🍜";
-    ctx.fillText('ใบเสร็จชำระร้านฮ้าฟฟูลล', 20, 20)
-    ctx.fillText('-------------------------------------------------------------------------------', 20, 30)
-    ctx.fillText(`ชื่อคุณ: ${purchase.username} ${em}`, 20, 50);
-    ctx.fillText(`ชื่อเมนู: ${purchase.namemenu}`, 20, 70);
-    ctx.fillText(`ราคา: ${purchase.price} บาท`, 20, 90);
-    ctx.fillText(`จำนวน: ${purchase.amount}`, 20, 110);
-    ctx.fillText(`วิธีการชำระเงิน: ${purchase.pay}`, 20, 130);
-    // ctx.fillText(`รวมเป็นเงิน: ${purchase.price * purchase.amount} บาท`, 20, 150);
-    ctx.fillText(`รวมเป็นเงิน: ${purchase.price} บาท`, 20, 150);
-    ctx.fillText(`วันที่: ${new Date().toLocaleString()}`, 20, 170);
-    ctx.fillText(`${emoji}`,300,190)
-    ctx.fillText('-------------------------------------------------------------------------------', 20, 180)
+    
+    const baseHeight = 440; 
+    const lineHeight = 40; 
+    const receiptHeight = baseHeight + purchase.order.ordercart.length * lineHeight;
+    canvas.width = 300;     
+    canvas.height = receiptHeight;
+  
+    // Background and shadow
+    ctx.shadowBlur = 3;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+    // Header
+    ctx.fillStyle = '#000000';
+    ctx.font = '16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('ใบเสร็จ', canvas.width / 2, 30);
+  
+    ctx.font = '12px Arial';
+    ctx.fillText('ร้านฮ้าฟฟูลล', canvas.width / 2, 50);
+    ctx.fillText('ทางแยกบ้านนาขมิ้น ตำบลนาขมิ้น', canvas.width / 2, 70);
+    ctx.fillText('อำเภอโพนสวรรค์ จังหวัดนครพนม', canvas.width / 2, 90);
+  
+    ctx.textAlign = 'left';
+    ctx.fillText('---------------------------------------------', 20, 110);
+  
+    // Customer details
+    ctx.font = '12px Arial';
+    ctx.fillText(`ชื่อ: ${purchase.user.username}`, 20, 130);
+    ctx.fillText(`เบอร์โทร: ${purchase.user.phon}`, 20, 150);
+  
+    // Payment details
+    ctx.fillText(`ชำระโดย: ${purchase.pay}`, 20, 170);
+    ctx.fillText(`สถานะ: ${purchase.order.status}`, 20, 190);
+  
+    ctx.fillText('---------------------------------------------', 20, 210);
+  
+    // Order items and calculating totals
+    let totalItems = 0;
+    let totalPrice = 0;
+  
+    purchase.order.ordercart.forEach((item, index) => {
+      const itemYPosition = 230 + index * lineHeight;
+      ctx.fillText(`${item.menutems.ItemName} (x${item.total})`, 20, itemYPosition);
+      ctx.textAlign = 'right';
+      ctx.fillText(`${item.all_price} บาท`, canvas.width - 20, itemYPosition);
+      ctx.textAlign = 'left';
+  
+      totalItems += item.total;
+      totalPrice += item.all_price;
+    });
+  
+    // Total quantity and price
+    const totalYPosition = 230 + purchase.order.ordercart.length * lineHeight;
+    ctx.fillText('---------------------------------------------', 20, totalYPosition);
+    ctx.fillText(`จำนวนทั้งหมด: ${totalItems} รายการ`, 20, totalYPosition + lineHeight);
+    ctx.fillText(`รวมทั้งหมด: ${totalPrice} บาท`, 20, totalYPosition + 2 * lineHeight);
+    
+    // Date and footer
+    ctx.fillText(`วันที่: ${new Date(purchase.order.date).toLocaleDateString()}`, 20, totalYPosition + 3 * lineHeight);
+    ctx.textAlign = 'center';
+    ctx.fillText('ขอบคุณที่ใช้บริการ', canvas.width / 2, totalYPosition + 5 * lineHeight);
+  
     return canvas.toDataURL();
-};
-
+  };
 
   const box = (purchase) => {
     Swal.fire({
       title: "ใบเสร็จ",
       text: "นี่คือรูปภาพใบเสร็จ",
       imageUrl: createReceiptImage(purchase),
-      imageWidth: 500,
-      imageHeight: 250,
+      imageWidth: 300,
+      imageHeight: 500,
       imageAlt: "ใบเสร็จ"
     });
-  }
-  
+  };
+
+  const handleToggleDetails = (itemId) => {
+    setExpandedItem(prevItem => (prevItem === itemId ? null : itemId));
+  };
+
+
+  const statusorderFn = (purchase) => {
+    if (purchase.order.status === 'รอยืนยันการสั้ง'){
+      return (
+        <div>
+          <p className='text-cyan-600'>{purchase?.order?.status}</p>
+          <p className='text-pink-500'>กำลังดำเนินการทำก๋วยเตี๋ยวอยู่กรุณารอสักครู่นะครับ</p>
+        </div>
+      )
+    }
+    else if (purchase.order.status === 'กำลังจัดส่ง') {
+      return (
+        <div>
+           <p className='text-cyan-600'>{purchase?.order?.status}</p>
+          <p className="text-orange-500">กำลังดำเนินการจัดส่งอยู่</p>
+          <p className="text-amber-400">ใช้เวลาประมาณ: 10 นาทีถึง 4 ชั่วโมง</p>
+        </div>
+      );
+    } else if (purchase.order.status === 'จัดส่งเรียบร้อย') {
+      return (
+        <div>
+           <p className='text-cyan-600'>{purchase?.order?.status}</p>
+          <p className="text-green-500">จัดส่งเรียบแล้วครับ</p>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center py-10">
-      <h2 className="text-2xl font-semibold mb-4">ข้อมูลการซื้อสินค้า</h2>
-      <div className="container mx-auto mt-10 p-4 rounded-lg">
-        {purchases.map(purchase => (
-          <div key={purchase.id} className="border-b border-gray-200 py-4">
-            <div className="flex items-center justify-between border-b border-gray-200 pb-9 mb-2">
-              <div>
-                <p className="text-lg font-semibold">ชื่อเมนู: {purchase.namemenu}</p>
-                <p className="text-gray-600">ราคา: {purchase.price}</p>
-                <p className="text-gray-600">จำนวน: {purchase.amount}</p>
-                <p className="text-gray-600">วิธีการชำระเงิน: {purchase.pay}</p>
-              </div>
-              <div>
-                <button className='bg-blue-500 px-4 py-2 rounded-md ml-2' onClick={() => box(purchase)}>
-                <box-icon name='receipt'></box-icon> แสดงรูปภาพใบเสร็จ
-                </button>
-                <a href={createReceiptImage(purchase)} download={`${purchase.namemenu}.png`}>
-                  <button className='bg-green-500 px-4 py-2 rounded-md ml-2'>
-                    <box-icon name='down-arrow-alt' ></box-icon> ดาวน์โหลดใบเสร็จ
+      <h2 className="text-2xl font-semibold mb-4">ประวัติการซื้อสินค้า</h2>
+      <div className="container mx-auto mt-10 p-4 rounded-lg bg-white shadow-lg">
+        {purchases.length > 0 ? (
+          purchases.map((purchase) => (
+            <div key={purchase.id} className="border-b border-gray-200 py-4 mb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-lg font-semibold">คุณ: {purchase.user.username}</p>
+                  <p className="text-gray-600">จำนวนเงิน: {purchase.amount} บาท</p>
+                  <p className="text-gray-600">วิธีชำระ: {purchase.pay}</p>
+                  <p className="text-gray-600">สถานะ: {purchase.status}</p>
+                  <ul className="text-gray-600 mt-2">
+                    {purchase.order.ordercart.map((item) => (
+                      <li key={item.id}>
+                        <div className="flex items-center justify-between">
+                          <span>{item.menutems.ItemName} (x{item.total}): {item.all_price} บาท</span>
+                          <button
+                            className="text-blue-500 ml-2"
+                            onClick={() => handleToggleDetails(item.id)}
+                          >
+                            {expandedItem === item.id ? 'ซ่อนรายละเอียด' : 'ดูรายละเอียด'}
+                          </button>
+                        </div>
+                        {expandedItem === item.id && (
+                          <div className="mt-2">
+                            {item.menutems.file && (
+                              <img
+                                src={item.menutems.file}
+                                alt={item.menutems.ItemName}
+                                className="w-32 h-32 object-cover"
+                              />
+                            )}
+                            <p className="text-gray-600 mt-2">{item.menutems.description}</p>
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-4">
+                    {statusorderFn(purchase)}
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 flex items-center"
+                    onClick={() => box(purchase)}
+                  >
+                    <box-icon name="receipt" color="white"></box-icon>
+                    <span className="ml-2">แสดงรูปภาพใบเสร็จ</span>
                   </button>
-                </a>
+                  <a href={createReceiptImage(purchase)} download={`${purchase.user.username}.png`}>
+                    <button className="bg-green-500 text-white px-4 py-2 rounded-md ml-2 flex items-center">
+                      <box-icon name="down-arrow-alt" color="white"></box-icon>
+                      <span className="ml-2">ดาวน์โหลดใบเสร็จ</span>
+                    </button>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-gray-500">ยังไม่มีประวัติการซื้อสินค้า</p>
+        )}
       </div>
     </div>
   );

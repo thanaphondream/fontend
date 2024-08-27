@@ -7,8 +7,9 @@
 }
 
 .imgfile img{
-    height: 650px;
-    width: 630px;
+    height: 100%;
+    width: 95%;
+    margin-left: -10%;
 }
 
 .paymentfrom{
@@ -47,7 +48,7 @@
 
 .menuname{
     margin-top: -60px;
-    margin-left: 50px;
+    margin-left: 120px;
 }
 
 .cen img{
@@ -57,36 +58,29 @@
     height: 100px;
 }
 
-.manu{
+/* .manu{
     margin-top: -25px;
     margin-left: 580px;
-}
+} */
 
 .prices {
-    margin-left: 500px;
+    margin-left: 420px;
     margin-top: -25px;
   }
 
-.amount1{
-    margin-left: 60px;
-}
 
 .userIds{
     margin-left: 190px;
 }
 
 .usernames{
-    margin-left: 550px;
+    margin-left: 200px;
     margin-top: -20px;
 }
 
 .pay{
-    margin-left: 250px;
+    margin-left: 25%;
     margin-top: 50px;
-}
-
-.Address{
-    margin-right: 60px;
 }
 
 .button{

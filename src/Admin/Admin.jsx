@@ -1,29 +1,69 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductForm() {
+  const navigate = useNavigate();
   const [input, setInput] = useState({
     ItemName: '',
     price: '',
     description: '',
-    file: ''
+    file: null
   });
+  const [imageUrl, setImageUrl] = useState('');
 
-  const hdlChange = e => {
-    setInput(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInput(prevItem => ({
+      ...prevItem,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setInput(prevItem => ({
+      ...prevItem,
+      file: file
+    }));
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImageUrl('');
+    }
   };
 
   const hdlSubmit = async e => {
+    e.preventDefault();
     try {
-      if(!input.ItemName || !input.price || !input.description || !input.file){
-        return alert(`กรุณากรอกข้อความใหม่`)
+      const formData = new FormData();
+      formData.append('ItemName', input.ItemName);
+      formData.append('price', input.price);
+      formData.append('description', input.description);
+      formData.append('image', input.file);
+      const token = localStorage.getItem('token');
+      const rs = await axios.post('http://localhost:8889/auth/menutems', formData ,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
       }
-      e.preventDefault();
-      const rs = await axios.post('http://localhost:8889/auth/menutems', input);
+    )
+
       console.log(rs);
-      setInput(rs.data);
-      alert('Create new OK');
+      setInput({
+        ItemName: '',
+        price: '',
+        description: '',
+        file: null
+      });
+      setImageUrl('');
+      navigate('/');
     } catch (err) {
       alert(err.message);
     }
@@ -31,10 +71,11 @@ export default function ProductForm() {
 
   return (
     <form className="flex flex-col min-w-[600px] border rounded w-5/6 mx-auto p-4 gap-6" onSubmit={hdlSubmit}>
-      <div className="text-3xl mb-5 ml-20 font-bold">Create Product</div>
+      <div className="text-3xl mb-5 ml-20 font-bold">เพิ่มเมนู</div>
+      
       <label className="form-control w-full">
         <div className="label">
-          <span className="label-text">name</span>
+          <span className="label-text">Name</span>
         </div>
         <input
           type="text"
@@ -42,13 +83,13 @@ export default function ProductForm() {
           className="input input-bordered w-full"
           name="ItemName"
           value={input.ItemName}
-          onChange={hdlChange}
+          onChange={handleChange}
         />
       </label>
 
       <label className="form-control w-full">
         <div className="label">
-          <span className="label-text">price</span>
+          <span className="label-text">Price</span>
         </div>
         <input
           type="number"
@@ -56,13 +97,13 @@ export default function ProductForm() {
           className="input input-bordered w-full"
           name="price"
           value={input.price}
-          onChange={hdlChange}
+          onChange={handleChange}
         />
       </label>
 
       <label className="form-control w-full">
         <div className="label">
-          <span className="label-text">description</span>
+          <span className="label-text">Description</span>
         </div>
         <input
           type="text"
@@ -70,23 +111,25 @@ export default function ProductForm() {
           className="input input-bordered w-full"
           name="description"
           value={input.description}
-          onChange={hdlChange}
+          onChange={handleChange}
         />
       </label>
-      <label className="form-control w-full">
-        <div className="label">
-          <span className="label-text">url</span>
-        </div>
+
+      <div className="mb-4">
+        <label htmlFor="file" className="block text-sm font-medium text-gray-700">File</label>
         <input
-          type="text"
-          placeholder="ใส่ลิงค์รูปภาพ"
-          className="input input-bordered w-full"
+          type="file"
+          id="file"
           name="file"
-          value={input.file}
-          onChange={hdlChange}
+          onChange={handleFileChange}
+          className="mt-1 block w-full"
         />
-      </label>
+      </div>
+
+      {imageUrl && <img src={imageUrl} alt="Selected" className="mb-4" />}
+
       <button type="submit" className="btn btn-primary">Submit</button>
     </form>
   );
 }
+

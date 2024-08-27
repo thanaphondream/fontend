@@ -1,98 +1,177 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
-import 'boxicons'
-// import { connect } from 'react-redux';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = 'http://localhost:8889/cart/carts/'; 
 
 const CartOrders = () => {
-    const [Cartorders, setPurchases] = useState([])
-    const { UserId } = useParams()
+    const [Cartorders, setPurchases] = useState([]);
+    const [selectedItems, setSelectedItems] = useState(new Set()); 
+    const { UserId } = useParams();
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchData = async () => {
-            try{
-                const token = localStorage.getItem('token')
-                const rs = await axios.get(`http://localhost:8889/auth/cartorder`, {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(API_BASE_URL, {
                     headers: { Authorization: `Bearer ${token}` },
-                    params: { UserId } 
-                  });
-                  setPurchases(rs.data);
-            }catch(err){
-                console.error('Error fetcing data:', err)
+                });
+                setPurchases(response.data);
+            } catch (err) {
+                console.error('Error fetching data:', err);
             }
-        }
-        fetchData()
-    }, [UserId])
-    
+        };
+        fetchData();
+    }, [UserId]);
+
     const handleDelete = async (id) => {
-        try{
+        try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8889/auth/cartdelete/${id}`, {
-                headers: { Authorization: `Bearer ${token}` } 
+            await axios.delete(`http://localhost:8889/cart/carts/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
             });
             setPurchases(Cartorders.filter(cartorder => cartorder.id !== id));
-            alert("ลบสินค้าแล้ว");
-        }catch(err){
-            console.error(err)
+             window.location.reload();
+            alert("Item deleted successfully");
+        } catch (err) {
+            console.error('Error deleting item:', err);
         }
-    }
-    console.log(Cartorders)
+    };
+
+    const handleCheckboxChange = (id) => {
+        setSelectedItems(prev => {
+            const newSelected = new Set(prev);
+            if (newSelected.has(id)) {
+                newSelected.delete(id);
+            } else {
+                newSelected.add(id);
+            }
+            return newSelected;
+        });
+    };
+
+ 
+
+    const updatetotal = async (id, newTotal) => {
+        try {
+            const currentItem = Cartorders.find(item => item.id === id);
+    
+            let newAllPrice;
+            if (newTotal > currentItem.total) {
+                newAllPrice = (currentItem.all_price / currentItem.total) * newTotal;
+            } else if (newTotal < currentItem.total) {
+                newAllPrice = (currentItem.all_price / currentItem.total) * newTotal;
+            } else {
+                newAllPrice = currentItem.all_price;
+            }
+    
+            const response = await axios.put(`http://localhost:8889/cart/carts/${id}`, {
+                total: newTotal,
+                all_price: newAllPrice,
+            });
+    
+            console.log('Cart updated successfully:', response.data);
+    
+            setPurchases(Cartorders.map(item =>
+                item.id === id ? { ...item, total: newTotal, all_price: newAllPrice } : item
+            ));
+             window.location.reload();
+        } catch (err) {
+            console.error('Error updating cart:', err);
+        }
+    };
 
     const prices = () => {
-        let totalPrice = 0;
-        Cartorders.forEach(cartorder => {
-            totalPrice += cartorder.price;
-        });
-        if(totalPrice === 0){
-            totalPrice = 'ไม่มีสินค้า'
-            
-        }
-        return totalPrice;
-    }
-    return( 
+        let totalPrice = Cartorders.reduce((sum, cartorder) => sum + cartorder.all_price, 0);
+        return totalPrice === 0 ? 'ไม่มีสินค้า' : totalPrice;
+    };
+
+    const handleProceedToPayment = () => {
+        const selectedCartItems = Cartorders.filter(cartorder => selectedItems.has(cartorder.id));
+        navigate('/payment', { state: { selectedCartItems } });
+    };
+
+    const isButtonDisabled = selectedItems.size === 0;
+
+    return (
         <div>
             <div>
-            <table className="table-auto border-collapse w-full mx-8">
-                <thead>
-                    <tr>
-                        <th className="px-4 py-2 text-align: center" width="5px">ลำดับ</th>
-                        <th className="px-4 py-2 text-align: center" width="300px">รูปภาพ</th>
-                        <th className="px-4 py-2 text-align: center" width="300px">ชื่อเมนู</th>
-                        <th className="px-4 py-2 text-align: center" width="400px">รายละเอียดสินค้า</th>
-                        <th className="px-4 py-2 text-align: center" width="100px">ราคา</th>
-                    </tr>
-                </thead>
-                {Cartorders.map((cartorder, index) => (
-                <tbody key={cartorder.id}>
-                    <tr>
-                        <td className="px-4 py-2 text-align: cente text-centerr">{index + 1}</td>
-                        <td className="px-4 py-2 text-align: center flex items-center justify-center">
-                            <img src={cartorder.file} alt="" className="w-20" />
-                        </td>
-                        <td className="px-4 py-2 text-align: center text-center">{cartorder.ItemName}</td>
-                        <td className="px-4 py-2 text-align: center white-space: nowrap">{cartorder.description}</td>
-                        <td className="px-4 py-2 text-align: center text-center">{cartorder.price}</td>
-                        <button className='bg-red-500 text-white px-4 py-2 rounded-md' onClick={() => handleDelete(cartorder.id)}>
-                            <box-icon type='solid' name='message-square-x'></box-icon>
-                        </button>
-                    </tr>
-                </tbody>
-                ))}
-            </table>
-            <br />
-            <hr />
-            <br />
-            <h1 className='ml-[70rem] text-2xl font-bold'>ราคารวม: {prices()}</h1>
-            <br />
-            <div className='ml-[70rem]'>
-                <Link to={`/payment/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`} className="btn btn-outline btn-success">
-                    <button className='w-28'>สั่งซื้อ</button>
-                </Link>
+                <table className="table-auto border-collapse w-full mx-8">
+                    <thead>
+                        <tr>
+                            <th className="px-4 py-2 text-center">เลือก</th>
+                            {/* <th className="px-4 py-2 text-center">ลำดับ</th> */}
+                            <th className="px-4 py-2 text-center">รูปภาพ</th>
+                            <th className="px-4 py-2 text-center">ชื่อเมนู</th>
+                            <th className="px-4 py-2 text-center">จำนวนสินค้า</th>
+                            <th className="px-4 py-2 text-center">ราคา</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Cartorders.map((cartorder, index) => (
+                            <tr key={cartorder.id}>
+                                <td className="px-4 py-2 text-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedItems.has(cartorder.id)}
+                                        onChange={() => handleCheckboxChange(cartorder.id)}
+                                    />
+                                </td>
+                                {/* <td className="px-4 py-2 text-center">{index + 1}</td> */}
+                                <td className="px-4 py-2 text-center">
+                                    <img src={cartorder.menutems.file} alt="" className="w-20" />
+                                </td>
+                                <td className="px-4 py-2 text-center">{cartorder.menutems.ItemName}</td>
+                                <td className="px-4 py-2 text-center">
+                                    <input
+                                        type="number"
+                                        value={cartorder.total}
+                                        min="1"
+                                        onChange={(e) => updatetotal(cartorder.id, parseInt(e.target.value))}
+                                        className="w-16 border border-gray-300 rounded px-2 py-1"
+                                    />
+                                </td>
+                                <td className="px-4 py-2 text-center">{cartorder.all_price}</td>
+                                <td className="px-4 py-2 text-center">
+                                    <button
+                                        className='bg-red-500 text-white px-4 py-2 rounded-md'
+                                        onClick={() => handleDelete(cartorder.id)}
+                                    >
+                                        <box-icon type='solid' name='message-square-x'></box-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <br />
+                <hr />
+                <br />
+                <h1 className='ml-[70rem] text-2xl font-bold'>ราคารวม: {prices()}</h1>
+                <br />
+                <div className='ml-[70rem]'>
+                <button
+                        className={`btn ${isButtonDisabled ? 'btn-warning' : 'btn-outline btn-success'} w-28`}
+                        onClick={handleProceedToPayment}
+                        disabled={isButtonDisabled}
+                    >
+                        สั่งซื้อ
+                    </button>
+                </div>
             </div>
-            </div>        
         </div>
-    )
-}
+    );
+};
 
-export default CartOrders
+export default CartOrders;
+
+// const api = 'http://localhost:8889/cart/carts/'
+// const token = localStorage.getItem('token');
+//     const response = await axios.get(api, {
+//         headers: { Authorization: `Bearer ${token}` },
+// });
+
+
+// export const els = response.data.reduce((sum, item, index) => sum + item.total, 0)
+// export const res = response.data

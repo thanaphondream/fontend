@@ -1,72 +1,81 @@
-import {Link, useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 const guestNav = [
-  { to : '/' }
-]
+  { to: '/' }
+];
 
 const userNav = [
-  { to : '/', text: '' }
-]
-
-
-
+  { to: '/', text: 'Home' }
+];
 
 export default function HeaderAdmin() {
-  const {user, logout} = useAuth()
-  const finalNav = user?.id ? userNav :guestNav
+  const { user, logout } = useAuth();
+  const finalNav = user?.id ? userNav : guestNav;
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const hdlLogout = () => {
-    logout()
-    navigate('/')
-  }
-  const hdlproduct = () =>{
-    navigate('/Admin')
-  }
-
-  const hdlhome = () => {
-    navigate('/')
-  }
-
+    logout();
+    navigate('/');
+  };
+  const hdlProduct = () => {
+    navigate('/Admin');
+  };
+  const hdlHome = () => {
+    navigate('/');
+  };
   const hdMyGrach = () => {
-    navigate('/Grach')
+    navigate('/Grach');
+  };
+
+  const hdRole = () => {
+    navigate('/updaterole')
   }
 
-  
+  const hdlorderconfirm = () => {
+    navigate('/confirmorder')
+  }
 
   return (
-    <ul>
-    <div className="navbar bg-base-100">
-    <div className="navbar-start">
-    <a className="btn btn-ghost text-xl" onClick={hdlhome}>ADMIN</a>
-    </div>
-    <div className="navbar-center hidden lg:flex ">
-    <ul className="menu menu-horizontal px-1 ">
-    <li><a onClick={hdlproduct}>Add Product</a></li>
-    </ul>
-    </div>
-    <div className="navbar-center hidden lg:flex ">
-    <ul className="menu menu-horizontal px-1 ">
-    <li><a onClick={hdMyGrach}>grach</a></li>
-    </ul>
-    </div>
-    <div className="navbar-end">
-    { user?.id && (
-        <li>
-            <Link to='#' onClick={hdlLogout}>logout</Link>
-        </li>
-        ) }
-    </div>
-    </div>
-        
-
-    {finalNav.map( el => (
-      <li key={el.to} ><Link to={el.to}>{el.text}</Link>
-      </li>
-    ))}
-  </ul>
-    )
-  }
+    <header className="bg-gray-800 text-white py-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="text-xl font-bold cursor-pointer" onClick={hdlHome}>
+          ADMIN
+        </div>
+        <nav className="ml-auto flex space-x-4">
+        <a className="hover:text-gray-400 cursor-pointer" onClick={hdlorderconfirm}>
+            OrderConfirm
+          </a>
+          <a className="hover:text-gray-400 cursor-pointer" onClick={hdlProduct}>
+            Add Product
+          </a>
+          <a className="hover:text-gray-400 cursor-pointer" onClick={hdRole}>
+            roleUpdate
+          </a>
+          <a className="hover:text-gray-400 cursor-pointer" onClick={hdMyGrach}>
+            Grach
+          </a>
+          {user?.id && (
+            <Link
+              to="#"
+              onClick={hdlLogout}
+              className="hover:text-gray-400 cursor-pointer text-red-600"
+            >
+              Logout
+            </Link>
+          )}
+          {/* {finalNav.map(el => (
+            <Link
+              key={el.to}
+              to={el.to}
+              className="hover:text-gray-400 cursor-pointer"
+            >
+              {el.text || 'Home'}
+            </Link>
+          ))} */}
+        </nav>
+      </div>
+    </header>
+  );
+}

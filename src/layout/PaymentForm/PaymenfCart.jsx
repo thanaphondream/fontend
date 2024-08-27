@@ -2,192 +2,222 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams} from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,  useLocation, Link } from 'react-router-dom';
+import Modal from 'react-modal';
+import PaymenyPost from './paymenyPost';
 
 const PaymentCart = () => {
-    const [formData, setFormData] = useState({
-        amount: 1,
-        userId: '',
-        menuItemsId: '',
-        username: '',
-        price: '',
-        pay: '',
-        namemenu: ''
-      });
-      const navigate = useNavigate()
-    const [errorMessage, setErrorMessage] = useState('');
-    const [PaymenfCart, setPurchases] = useState([])
-    const { UserId } = useParams()
-    const [ user, setUser] = useState({})
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const token = localStorage.getItem('token')
-                const rs = await axios.get(`http://localhost:8889/auth/cartorder`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                    params: { UserId } 
-                  });
-                  setPurchases(rs.data);
-            }catch(err){
-                console.error('Error fetcing data:', err)
-            }
-        }
-        fetchData()
-    }, [UserId])
+  const location = useLocation();
+  const { selectedCartItems } = location.state || {};
+  console.log(selectedCartItems)
+  // const rq = selectedCartItems[0]
+  const [ user, setUser ] = useState([])
+  const [ locations, setLocations ] = useState([])
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [ locationId, setLocationId ] = useState([])
+  const [ lo, setLo ] = useState([])
+  const locationIds = localStorage.getItem('loca')
+  console.log("ffss",locationIds)
+  
 
-    useEffect(() => {
-        const fetchUser = async () => {
-          try{
-            const token1 = localStorage.getItem('token')
-            const response01 = await axios.get(`http://localhost:8889/auth/user`,{
-              headers: {Authorization: `Bearer ${token1}`}
-            })
-            setUser(response01.data)
-          }catch (error){
-            console.error('Error fetching product:', error)
-          }
-        }
-    
-        fetchUser()
-      }, [UserId])
+  useEffect(() => {
+    const Data_all = async () => {
+      try{
+        const token = localStorage.getItem('token')
+        const rsUser = await axios.get('http://localhost:8889/auth/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        setUser(rsUser.data)
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-      };
-    
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (formData.pay === "") {
-          Swal.fire({
-            title: "กรุณาเลือกวิธีชำระ",
-            text: "โปรดเลือกวิธีการชำระเงิน",
-            icon: "warning"
-          });
-          return; 
-        }
-      
-        try {
-          Swal.fire({
-            title: "ต้องการที่จะชำระเงินหรือไม่",
-            text: "คุณต้องการที่จะดำเนินการชำระเงินหรือไม่",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "ใช่, ฉันต้องการชำระเงิน",
-            cancelButtonText: "ไม่, ฉันไม่ต้องการชำระเงิน",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33"
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              try {
-                // ส่งข้อมูลไปยังเซิร์ฟเวอร์ของคุณ
-                await Promise.all(PaymenfCart.map(async (item) => {
-                  const response1 = await axios.post('http://localhost:8889/auth/payment', {
-                      productId: item.menuItemsId,
-                      amount: formData.amount,
-                      userId: formData.userId,
-                      menutemsId: formData.menuItemsId,
-                      username: formData.username,
-                      price: item.price * formData.amount,
-                      pay: formData.pay,
-                      namemenu:  item.ItemName
-                  });
-                  console.log('Payment successful:', response1.data);
-                }));
-                Swal.fire(
-                  "ชำระเงินสำเร็จ!",
-                  "คุณได้ทำการชำระเงินเรียบร้อยแล้ว",
-                  "success"
-                );
-                navigate('/')
-              } catch (error) {
-                console.error('Error processing payment:', error);
-                setErrorMessage('An error occurred while processing payment. Please try again later.');
-              }
-            }
-          });
-        } catch (error) {
-          console.error('Error processing payment:', error);
-          setErrorMessage('An error occurred while processing payment. Please try again later.');
-        }
-    };
-    
-      console.log(formData)
+        const rslocation = await axios.get('http://localhost:8889/location/locationid', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        setLocations(rslocation.data)
+        console.log("df",rslocation.data)
 
-    return (
-        <div>
-          <br />
-          <h1 className='text-center'>ชำระเงิน</h1>
-            <br />
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <div>
-            {PaymenfCart.map(paymenfcarts => ( 
-            <div key={paymenfcarts.id}  className="mb-8">
-                <hr /><br />
-            <div  className='w-20  mx-auto'>
-                <img src={paymenfcarts.file} alt="" className="rounded-lg block w-50" style={{ width: '500px' }}/>
-            </div>
-            <br />
-          <div  className='flex flex-col text-center'>
-            <label htmlFor="namemenu" className="text-lg">ชื่อเมนู : </label>
-            <input type="text" name='namemenu' id='namemenu' value={formData.namemenu = paymenfcarts.ItemName} onCanPlay={handleChange} className="text-2xl font-bold text-center"  readOnly/>
-          </div>
-          <br />
-          <div className='menuItemsId text-center'>
-            <label htmlFor="menuItemsId" className="text-lg ">  MenuID:     </label>
-            <input type="text" id="menuItemsId" name="menuItemsId" value={formData.menuItemsId = paymenfcarts.menutemsId} onChange={handleChange}  className="border-2 border-gray-200 p-2 rounded-md mb-4 w-12"  readOnly />
-          </div>
-          <br />
-          <div className="text-center">
-            <div className="amount1">
-              <label htmlFor="amount" className="text-lg ">Amount:  </label>
-              <input type="number" id="amount" name="amount" value={formData.amount} onChange={handleChange} min="1" max="10"  className="border-2 border-gray-200 p-2 rounded-md mb-4 w-20"/>
-            </div>
-            <br />
-            <div className=" text-center">
-              <label htmlFor="price" className=" text-center font-bold">price : </label>
-              <input className='w-9 font-bold  text-red-600' type="text" name='price' id='price' value={formData.price = paymenfcarts.price * formData.amount} onChange={handleChange} readOnly/>
-            </div>
-          </div>
-          <br /><br />
-          <div className="text-center">
-            <label htmlFor="userId">User ID :   </label>
-            <input type="text" id="userId" name="userId" className='w-12' value={formData.userId = user.id}  onChange={handleChange} />
-          </div>
-          <br /><br />
-          <div  className="text-center  ">
-              <label htmlFor="username">UserName : </label>
-              <input className='w-16' type="text" name='username' id='username' value={formData.username = user.username} onChange={handleChange} />
-            </div>
-            </div>
-            ))}
+      }catch(err){
+        console.error(`เกิดข้อผิดพลาด ${err}`)
+      }
+    }
+    Data_all()
+    locationIdShow()
+    // rqA1()
+  }, [])
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+
+  const model = () => {
+    return(
+      <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      contentLabel="เลือกที่อยู่"
+      style={{
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80%',
+          maxWidth: '600px',
+        }
+      }}
+    >
+      <h2 className='text-center'>เลือกที่อยู่</h2>
+      {locations.length > 0 ? (
+       <div className='p-8'>
+         <ul>
+          {locations.map((location, index) => (
+            <li className='border border-sky-100 p-2' key={index} onClick={() => locationIdShow(location.id)}> 
+            จังหวัด {location.provinces}  
+            อำเภอ {location.amphures} 
+            ตำบล {location.districts} 
+            ถนน {location.road} 
+            หมู่บ้านที่ {location.village} 
+            บ้านเลขที่  {location.house_number} 
+            และอื่นๆ  {location.other} 
+            รหัสไปรษณีย์: {location.zip_code}</li>
+          ))}
+        </ul>
+       </div>
+      ) : (
+        <p>ยังไม่มีที่อยู่</p>
+      )}
+      <button onClick={closeModal}>ปิด</button>
+      <Link  to={`/location`}>
+            <button className="btn">เลือกข้อมูล</button>
+        </Link>
+    </Modal>
+    )
+  }
+
+  const locationIdShow = async (los) => {
+    try{
+      console.log("fafa",los)
+      if(los){
+        const token = localStorage.getItem('token')
+      const rs = await axios.get(`http://localhost:8889/location/location/${los}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setLocationId(rs.data)
+      setLo(rs.data.id)
+      // const user1 = localStorage.getItem('user')
+      // // console.log("user Is 88888", rs.data.userId, user1, rs.data)
+      // // console.log(rs.data.userId == user1, "fsfsfsf")
+      // if (rs.data.userId === user1) {
+      //   setLo(rs.data.id);
+      // } else {
+      //   setLo('');
+      // }
+      }else{
+      const token = localStorage.getItem('token')
+      const rs = await axios.get(`http://localhost:8889/location/location/${locationIds}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const user1 = localStorage.getItem('user')
+      // console.log("user Is 88888", rs.data.userId, user1, rs.data.id)
+      // console.log(rs.data.userId == user1, "fsfsfsf")
+      setLocationId(rs.data)
+
+      if (rs.data.userId == user1) {
+        setLo(rs.data.id);
+      } else {
+        setLo('');
+      }
+      }
+      closeModal()
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  // const rqA1 = () => {
+  //   console.log("ffsfafafaffafaf",locationId)
+  //   const user1 = localStorage.getItem('user')
+  //   console.log("user Is 88888", locationId.userId, user1, locationId.id)
+  //     if (locationId.userId === user1) {
+  //       setLo(locationId.id);
+  //     } else {
+  //       setLo('');
+  //     }
+  // }
+
+
+  const patget = () => {
+    const totalSum = selectedCartItems.length;
+    const total = selectedCartItems.reduce((sum, item, index) => sum + item.total, 0);
+
+    return(
+      <div>
+        <h1 className='font-semibold'>เมนูรวมทั้งหมด {totalSum} เมนู {total} จำนวน</h1>
+      </div>
+    )  
+  };
+ 
+  // console.log("ffs88888888888122", lo)
+
+  return(
+    <div>
+      <div className='flex-wrap flex content-center gap-10 justify-center p-1'>
+      <div className='bg-zinc-100 w-[48%] h-[8rem] p-2'>
+        <p className='ml-4 font-semibold'>ที่อยู่ในการจัดส่ง</p>
+        <p className='ml-4 font-medium'>{user.username}  {user.phon}</p>
+        <div className='ml-[35rem] -mt-10'>
+          <button className='bg-teal-300 rounded-lg ' onClick={openModal}>แก้ไขที่อยู่</button>
+        </div>  
+        {model()}
+        {locations.length ? (
+        <div className='m-5 font-medium'>
+          {locations.map((location, index) => (
+            <p key={index}></p>
+
+          ))}
+          <p >จังหวัด {locationId.provinces} 
+            อำเภอ {locationId.amphures} 
+            ตำบล {locationId.districts} 
+            ถนน {locationId.road} 
+            หมู่บ้านที่ {locationId.village} 
+            บ้านเลขที่  {locationId.house_number} 
+            และอื่นๆ  {locationId.other} 
+            รหัสไปรษณีย์: {locationId.zip_code}</p>
         </div>
-        <br />
-        <hr />
-        <br />
-        <div className="text-center">
-            
+      ) : (
+        <div className='text-center mt-5'>
+          <p>ยังไม่มีที่อยู่</p>
+          <Link  to={`/location`}>
+            <button className="btn">เลือกข้อมูล</button>
+        </Link>
         </div>
-        <br />
-        <div className="text-center">
-          <select
-              name="pay"
-              value={formData.pay} 
-              onChange={handleChange}
-              className="select select-bordered w-full max-w-xs"
-            >
-              <option>เลือกวิธีชำระ</option>
-              <option value="ปลายทาง">ปลายทาง</option>
-              <option value="โอนจ่าย">โอนจ่าย</option>
-            </select>
-          </div>
-          <br />
-          <div className='text-center'>
-          <button onClick={handleSubmit} className="btn btn-outline btn-success">Pay Now</button>
-          </div>
-            
+      )}
+      </div>
+
+      <div className='w-[30%] bg-zinc-100 '>
+        <p className='font-semibold ml-4 mt-2'>เลือกวิธีการชำระ</p>
+        <PaymenyPost  el={selectedCartItems} lo={lo} />
+      </div>
     </div>
-);
+    <div  className='w-[48%] bg-zinc-100  ml-[10%] -m-[32rem] p-2'>
+    {patget() }
+
+     
+        <div>
+        {selectedCartItems.map((item, index) => (
+            <div key={item.id} className='flex overflow-x-auto  ml-4 gap-5 m-5'>
+              <br />
+              <img src={item.menutems.file} alt="" className="w-20 h-20"/>
+              <p className='text-sm'>{item.menutems.description}</p>
+              <p>฿{item.all_price}</p>
+              <p className='ml-10'>จำนวน {item.total}</p>
+              <br /><br />
+            </div>
+        ))}
+        </div>
+    </div>
+    </div>
+  )
 }
 
 export default PaymentCart

@@ -13,6 +13,20 @@ import HomAdmin from '../Admin/homAdmin';
 import CartOrders from '../layout/CartOrder/CartOrders';
 import PaymentCart from '../layout/PaymentForm/PaymenfCart';
 import MyChart from '../Admin/Grach';
+import Address from '../layout/Address/address'
+import PaymentQRCode from '../layout/PaymentForm/PaymentQRCode';
+import UpdateMenuItemForm from '../Admin/UpdateMenuItemForm';
+import Profile from '../layout/Profile'
+import HeaderOrricer from '../Officer/HeaderOrricer';
+import HomeOfficer from '../Officer/HomeOfficer';
+import FoodDelivery from '../Officer/FoodDelivery';
+import ConfirmDelivery from '../Officer/ConfirmDelivery';
+import Finished_work from '../Officer/Finished_work';
+import Already_Shipped from '../Officer/Already_Shipped';
+import UserUpdaterole from '../Admin/UserUpdaterole';
+import ConfirmOrder from '../Admin/ConfirmOrder';
+import Already from '../Admin/Already';
+import Home from '../layout/Home';
 
 const guestRouter = createBrowserRouter([
   {
@@ -24,7 +38,8 @@ const guestRouter = createBrowserRouter([
       </>
     ),
     children: [
-      { index: true, element: <LoginForm /> },
+      { index: true, element: <Home /> },
+      { path: '/loing', element: <LoginForm/>},
       { path: '/register', element: <RegisterForm /> }
     ]
   }
@@ -43,9 +58,13 @@ const userRouter = createBrowserRouter([
       { index: true, element: <UserHome /> },
       { path: '/Usreproduck', element: <UserProduck/>},
       { path: '/product/:id', element: <ProductDetail /> }, 
-      { path: '/payment/:id/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentForm/> } ,
+      { path: '/PaymentForm', element: <PaymentForm/> } ,
+      { path: '/payment/:id', element: <PaymentForm/> } ,
       { path: '/cartorder', element: <CartOrders/>},
-      { path: '/payment/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01', element: <PaymentCart/>}
+      { path: '/payment', element: <PaymentCart/>},
+      { path: '/location', element: <Address/>},
+      { path: '/vvbbb', element: <PaymentQRCode/>},
+      { path: '/profile', element: <Profile/> },
     ]
   }
 ]);
@@ -62,15 +81,56 @@ const adminRouter = createBrowserRouter([
     children: [
       { index: true, element: <HomAdmin /> }, 
       { path: '/Admin', element: <Admin/>},
-      { path: '/Grach', element: <MyChart/>}
+      { path: '/Grach', element: <MyChart/>},
+      { path: '/updatemunu/:id', element: <UpdateMenuItemForm/>},
+      { path: '/updaterole', element: <UserUpdaterole/>},
+      { path: '/confirmorder', element: <ConfirmOrder/>},
+      { path: '/already', element: <Already/>}
+    ]
+  }
+]);
+
+const OfficerRouter = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <>
+        <HeaderOrricer /> 
+        <Outlet />
+      </>
+    ),
+    children: [
+      { index: true, element: <HomeOfficer /> }, 
+      { path: '/delivery', element: <FoodDelivery/>},
+      { path: '/confirm', element: <ConfirmDelivery/>},
+      { path: '/finishedWork', element: <Finished_work/>},
+      { path: '/alreadyshipped', element: <Already_Shipped/>}
     ]
   }
 ]);
 
 export default function AppRouter() {
   const {user} = useAuth()
-  const finalRouter = user?.id ? user.role ==='ADMIN'? adminRouter: userRouter : guestRouter
+  const finalRouter = () => {
+    if (!user?.id) {
+      return guestRouter;
+    }
+  
+    if (user.role === 'OFFICER') {
+      return OfficerRouter;
+    }
+  
+    if (user.role === 'ADMIN') {
+      return adminRouter;
+    }
+  
+    return userRouter;
+  };
+  
+  const selectedRouter = finalRouter();
+
+
   return (
-    <RouterProvider router={finalRouter} />
+    <RouterProvider router={selectedRouter} />
   )
 }

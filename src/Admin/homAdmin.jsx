@@ -1,7 +1,9 @@
-import axios from 'axios';    
+import axios from 'axios';
 import { useEffect, useState } from 'react';
+import 'tailwindcss/tailwind.css';
+import { Link } from 'react-router-dom';
 
-export default function homeAdmin() {
+export default function HomeAdmin() {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
@@ -19,39 +21,29 @@ export default function homeAdmin() {
     fetchMenuItems();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      const token = localStorage.getItem('token');
-      const rs = await axios.delete(`http://localhost:8889/auth/deletemenu/${id}`, {
-        headers: { Authorization: `Bearer ${token}` } 
-      });
-      setMenuItems(menuItems.filter(item => item.id !== id));
-      console.log(rs.data)
-      alert("ลบสินค้าแล้ว");
-    } catch (error) {
-      console.error('Error deleting menu purchase:', error);
-    }
-  };
+ 
 
   return (
-    <div >
+    <div className="container mx-auto p-4">
+      <div className="text-3xl mb-5 ml-20 font-bold">เมนูทั้งหมด</div>
       {menuItems.map((item) => (
-        <div key={item.id}  class=" bg-gray-200 w-full m-10">
-            <div>
-            <img className="w-20" src={item.file} alt=""/>
+        <div key={item.id} className="bg-white shadow-lg rounded-lg overflow-hidden mb-6">
+          <Link to={`/updatemunu/${item.id}`}>
+          <div className="md:flex">
+            <div className="md:flex-shrink-0">
+              <img className="h-48 w-full object-cover md:w-48" src={item.file} alt={item.itemName} />
             </div>
-            <div>
-            <h3 className="">{item.itemName}</h3>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold">{item.itemName}</h3>
+              <p className='text-gray-700 mt-2'>ชื่อเมนู {item.ItemName}</p>
+              <p className="text-gray-700 mt-2">ราคา {item.price} บาท</p>
+              <p className='text-gray-700 mt-2'>รายละเอียด</p>
+              <p className='text-gray-700 mt-2'>{item.description}</p>
             </div>
-            <div>
-            <p className="">ราคา: {item.price}</p>
-            </div>
-          <button  className='bg-red-500 text-white px-4 py-2 rounded-md' onClick={() => handleDelete(item.id)}>ลบ</button>
-          <div className="divider" ></div>
+          </div>
+          </Link>
         </div>
       ))}
-      <hr />
-      <div></div>
     </div>
   );
 }
