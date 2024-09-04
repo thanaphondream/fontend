@@ -40,7 +40,7 @@ export default function RegisterForm() {
           showConfirmButton: false,
           timer: 1500
         });
-        navigate('/')
+        navigate('/loing')
       }
     }catch(err) {
       console.log( err.message)

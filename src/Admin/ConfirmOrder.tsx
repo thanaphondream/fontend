@@ -35,10 +35,37 @@ function ConfirmOrder() {
 
     const pendingBookings = order.filter((bk) => bk.status === 'รอยืนยันการสั้ง');
 
-    console.log(pendingBookings);
-
     const LinkAFn = (order) => {
         navigate('/already', {state: {order}})
+    }
+
+    const PayFn = (o) => {
+        const pay = o.Payment.map(p => p.status)
+        if(pay == 'ยังไม่ชำระการโอน'){
+            return(
+                <div>
+                    <p className='text-red-600'>{pay}</p>
+                    <p className='text-red-600'>รายการยังไม่โอนจ่าย</p>
+                </div>
+            )
+        }
+        else if(pay == 'โอนจ่ายแล้ว'){
+            return(
+                <div>
+                    <p className='text-green-500'>{pay}</p>
+                </div>
+            )
+        }
+
+        else if(pay == 'ชำระปลายทาง'){
+            return(
+                <div>
+                    <p className='text-cyan-500'>{pay}</p>
+                </div>
+            )
+        }
+
+        console.log(55,pay)
     }
 
     return (
@@ -53,6 +80,10 @@ function ConfirmOrder() {
                 <p>No orders waiting for confirmation.</p>
             ) : (
                 <div className="space-y-4 text-left mt-10">
+                    <div className='text-center'>
+                    <button className='text-stone-50 bg-red-600'>รายการยกเลิก</button>
+                    <button className='bg-green-600 ml-4'>รายการรวม</button>
+                    </div>
                     {pendingBookings.map((orders) => {
                         const orderalls = orders.ordercart.length;
 
@@ -89,6 +120,9 @@ function ConfirmOrder() {
 
                                 <div className="text-right mt-4">
                                     <p className="bg-amber-300 w-32 py-1 px-2 rounded-lg inline-block text-center">{orders.status}</p>
+                                </div>
+                                <div>
+                                    {PayFn(orders)}
                                 </div>
                             </div>
                         );

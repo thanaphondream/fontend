@@ -69,13 +69,19 @@ const paymenyPost = (props) => {
     
     const paymentPost = async (rs) => {
         try{
-            // console.log('sfs', lo)
-            // console.log("sfss", rs.order.id)
+            
+            let mony = ''
+            if(payments.pay === 'โอนจ่าย'){
+                mony = 'ยังไม่ชำระการโอน'
+            }else{
+                mony = 'ชำระปลายทาง'
+            }
+
             const rspy = await axios.post('http://localhost:8889/payment/payments',{
                 userId: user,
                 amount: 1.0,
                 pay: payments.pay,
-                status: 'ชำระแล้ว',
+                status: mony,
                 locationId: lo,
                 orderId: rs.order.id
             })
@@ -85,8 +91,15 @@ const paymenyPost = (props) => {
             await axios.get(`http://localhost:8889/payment/linemenu/${rspy.data.payment.id}`,{
                 headers: { Authorization: `Bearer ${token}` }
             })
+
             deletecart()
-            navigate('/')
+            
+            if( rspy.data.payment.pay === 'โอนจ่าย'){
+                const pay_Id = rspy.data.payment.id
+                navigate('/pay', {state: { pay_Id }})
+            }else{
+                navigate('/')
+            }
         }catch(err){
             console.error(err)
         }

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import 'boxicons';
 import Swal from 'sweetalert2';
 
 function UserProduck() {
+  const navigate = useNavigate()
   const [purchases, setPurchases] = useState([]);
   const [expandedItem, setExpandedItem] = useState(null); // Track expanded item
   const { userId } = useParams();
@@ -18,6 +19,7 @@ function UserProduck() {
           params: { userId }
         });
         setPurchases(response.data);
+        // console.log(response.data)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -112,31 +114,72 @@ function UserProduck() {
 
 
   const statusorderFn = (purchase) => {
-    if (purchase.order.status === 'รอยืนยันการสั้ง'){
-      return (
+    const pay_Id = purchase.id
+
+    if(purchase.status === 'โอนจ่ายแล้ว' || purchase.status === 'ชำระปลายทาง'){
+      if (purchase.order.status === 'รอยืนยันการสั้ง'){
+        return (
+          <div>
+            <p className='text-cyan-600'>{purchase?.order?.status}</p>
+            <p className='text-pink-500'>กำลังดำเนินการทำก๋วยเตี๋ยวอยู่กรุณารอสักครู่นะครับ</p>
+          </div>
+        )
+      }
+      else if (purchase.order.status === 'กำลังจัดส่ง') {
+        return (
+          <div>
+             <p className='text-cyan-600'>{purchase?.order?.status}</p>
+            <p className="text-orange-500">กำลังดำเนินการจัดส่งอยู่</p>
+            <p className="text-amber-400">ใช้เวลาประมาณ: 10 นาทีถึง 4 ชั่วโมง</p>
+          </div>
+        );
+      } else if (purchase.order.status === 'จัดส่งเรียบร้อย') {
+        return (
+          <div>
+             <p className='text-cyan-600'>{purchase?.order?.status}</p>
+            <p className="text-green-500">จัดส่งเรียบแล้วครับ</p>
+          </div>
+        );
+      } else if (purchase.order.status === 'ยกเลิกเมนู'){
+        return (
+          <div>
+            <p className='text-red-500'>{purchase?.order?.status}</p>
+            <p className='text-cyan-600'>สินค้าถูกยกเลิกเนื่องจาก {purchase.order?.Cancel[0].note}</p>
+          </div>
+        )
+      }
+    }else {
+      return(
         <div>
-          <p className='text-cyan-600'>{purchase?.order?.status}</p>
-          <p className='text-pink-500'>กำลังดำเนินการทำก๋วยเตี๋ยวอยู่กรุณารอสักครู่นะครับ</p>
+          <p className='text-amber-400'>{purchase.status}</p>
+          <p className='text-teal-400'>รายการยังไม่โอนจ่ายกรุณาโอนจ่ายหน่อยครับ</p>
+          <p onClick={() => navigate('/pay', { state: { pay_Id }})} className='text-slate-950 bg-cyan-400 mt-5 text-center w-24 rounded-lg'>กดเพื่อชำระ</p>
         </div>
       )
     }
-    else if (purchase.order.status === 'กำลังจัดส่ง') {
-      return (
-        <div>
-           <p className='text-cyan-600'>{purchase?.order?.status}</p>
-          <p className="text-orange-500">กำลังดำเนินการจัดส่งอยู่</p>
-          <p className="text-amber-400">ใช้เวลาประมาณ: 10 นาทีถึง 4 ชั่วโมง</p>
-        </div>
-      );
-    } else if (purchase.order.status === 'จัดส่งเรียบร้อย') {
-      return (
-        <div>
-           <p className='text-cyan-600'>{purchase?.order?.status}</p>
-          <p className="text-green-500">จัดส่งเรียบแล้วครับ</p>
-        </div>
-      );
-    }
   };
+
+  const slipbutton = (purchase) => {
+    if(purchase.order.status === 'จัดส่งเรียบร้อย'){
+      return(
+        <div className="flex items-center">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 flex items-center"
+          onClick={() => box(purchase)}
+        >
+          <box-icon name="receipt" color="white"></box-icon>
+          <span className="ml-2">แสดงรูปภาพใบเสร็จ</span>
+        </button>
+        <a href={createReceiptImage(purchase)} download={`${purchase.user.username}.png`}>
+          <button className="bg-green-500 text-white px-4 py-2 rounded-md ml-2 flex items-center">
+            <box-icon name="down-arrow-alt" color="white"></box-icon>
+            <span className="ml-2">ดาวน์โหลดใบเสร็จ</span>
+          </button>
+        </a>
+      </div>
+      )
+    }
+  }
 
   return (
     <div className="flex flex-col justify-center items-center py-10">
@@ -182,21 +225,7 @@ function UserProduck() {
                     {statusorderFn(purchase)}
                   </div>
                 </div>
-                <div className="flex items-center">
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 flex items-center"
-                    onClick={() => box(purchase)}
-                  >
-                    <box-icon name="receipt" color="white"></box-icon>
-                    <span className="ml-2">แสดงรูปภาพใบเสร็จ</span>
-                  </button>
-                  <a href={createReceiptImage(purchase)} download={`${purchase.user.username}.png`}>
-                    <button className="bg-green-500 text-white px-4 py-2 rounded-md ml-2 flex items-center">
-                      <box-icon name="down-arrow-alt" color="white"></box-icon>
-                      <span className="ml-2">ดาวน์โหลดใบเสร็จ</span>
-                    </button>
-                  </a>
-                </div>
+                    {slipbutton(purchase)}
               </div>
             </div>
           ))

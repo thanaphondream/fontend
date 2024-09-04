@@ -183,7 +183,7 @@ const PaymentForm = () => {
     return(
       <div>
         <div className='flex-wrap flex content-center gap-10 justify-center p-1'>
-        <div className='bg-zinc-100 w-[48%] h-[8rem] p-2'>
+        <div className='bg-zinc-50 w-[48%] h-[8rem] p-2'>
           <p className='ml-4 font-semibold'>ที่อยู่ในการจัดส่ง</p>
           <p className='ml-4 font-medium'>{user.username}  {user.phon}</p>
           <div className='ml-[35rem] -mt-10'>
@@ -215,7 +215,7 @@ const PaymentForm = () => {
         )}
         </div>
   
-        <div className='w-[30%] bg-zinc-100 '>
+        <div className='w-[30%] bg-zinc-50 '>
           <p className='font-semibold ml-4 mt-2'>เลือกวิธีการชำระ</p>
           <div className='p-5'>
                     <div>
@@ -293,7 +293,7 @@ const PaymentForm = () => {
       <button className='btn btn-success w-full mt-2' onClick={ordersFn}>สั้งซื้อ</button>
         </div>
       </div>
-        <div  className='w-[48%] bg-zinc-100  ml-[10%] -m-[38%] '>
+        <div  className='w-[48%] bg-zinc-50  ml-[10%] -m-[38%] '>
         <div>
         <h1 className='font-semibold'>เมนูรวมทั้งหมด {1} เมนู {1} จำนวน</h1>
       </div>

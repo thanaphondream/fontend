@@ -14,8 +14,8 @@ function Already() {
 
     const allnumber = orderData?.ordercart.length || 0;
 
-    const latitude = orderData?.Payment[0]?.location.longitude;
-    const longitude = orderData?.Payment[0]?.location.latitude;
+    const latitude = orderData?.Payment[0]?.location.latitude;
+    const longitude = orderData?.Payment[0]?.location.longitude;
 
     const paymentids = orderData?.Payment[0]?.id;
     const orderId = orderData?.id;
@@ -34,6 +34,13 @@ function Already() {
             timer: 1500
           });
         navigate('/confirmorder')
+    }
+    const LinkCencel = () => {
+        navigate('/cancel', {state: { orderData }})
+    }
+
+    const TransferFn = () => {
+
     }
 
     return (
@@ -114,8 +121,23 @@ function Already() {
                             </Marker>
                         </MapContainer>
                     </div>
+                    <div>
+                        {orderData?.Payment[0]?.Transfer[0] ? (
+                            <div>
+                                <img src={orderData?.Payment[0]?.Transfer[0].image} alt="" />
+                            </div>
+                        ): (
+                            <p>ไม่มีข้อมูลข้างใน</p>
+                        )}
+                    </div>
                     <div className="text-center mt-10">
                         <hr className="mb-6" />
+                        <button
+                            className="bg-red-600 text-white w-[25%] h-14 rounded-md shadow-lg hover:bg-cyan-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                            onClick={LinkCencel}
+                        >
+                           ยกเลิกสินค้า
+                        </button>
                         <button
                             className="bg-cyan-500 text-white w-[25%] h-14 rounded-md shadow-lg hover:bg-cyan-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
                             onClick={OrderFnstatus}

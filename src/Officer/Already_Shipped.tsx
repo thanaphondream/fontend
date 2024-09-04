@@ -16,8 +16,8 @@ const Already_Shipped = () => {
 
     // const allnumber = orderData.ordercart.reduce((total, item, index) => total + index, 1);
     const allnumber = orderData.ordercart.length;
-    const latitude = orderData?.Payment[0]?.location.longitude
-    const longitude = orderData?.Payment[0]?.location.latitude
+    const latitude = orderData?.Payment[0]?.location.latitude
+    const longitude = orderData?.Payment[0]?.location.longitude
 
 
     // console.log(allnumber);

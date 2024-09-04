@@ -15,7 +15,8 @@ function ConfirmDelivery() {
     const [delivery, setDelivery] = useState({
         name: '',
         Note: '',
-        paymentId: paymentIds
+        paymentId: paymentIds,
+        date: new Date()
     });
 
     const [image, setImage] = useState(null);
@@ -59,6 +60,7 @@ function ConfirmDelivery() {
         formData.append('name', delivery.name);
         formData.append('Note', delivery.Note);
         formData.append('paymentId', delivery.paymentId);
+        formData.append('date', delivery.date)
 
         try {
             const rs = await axios.post('http://localhost:8889/dlivery/dliverys', formData);

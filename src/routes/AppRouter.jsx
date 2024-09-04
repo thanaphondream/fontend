@@ -27,6 +27,8 @@ import UserUpdaterole from '../Admin/UserUpdaterole';
 import ConfirmOrder from '../Admin/ConfirmOrder';
 import Already from '../Admin/Already';
 import Home from '../layout/Home';
+import Cancel from '../Admin/Cancel';
+import Pay from '../layout/PaymentForm/Pay';
 
 const guestRouter = createBrowserRouter([
   {
@@ -65,6 +67,7 @@ const userRouter = createBrowserRouter([
       { path: '/location', element: <Address/>},
       { path: '/vvbbb', element: <PaymentQRCode/>},
       { path: '/profile', element: <Profile/> },
+      { path: '/pay', element: <Pay/>}
     ]
   }
 ]);
@@ -85,7 +88,8 @@ const adminRouter = createBrowserRouter([
       { path: '/updatemunu/:id', element: <UpdateMenuItemForm/>},
       { path: '/updaterole', element: <UserUpdaterole/>},
       { path: '/confirmorder', element: <ConfirmOrder/>},
-      { path: '/already', element: <Already/>}
+      { path: '/already', element: <Already/>},
+      { path: '/cancel', element: <Cancel/>}
     ]
   }
 ]);
