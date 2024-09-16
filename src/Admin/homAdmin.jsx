@@ -6,22 +6,64 @@ import { Link } from 'react-router-dom';
 export default function HomeAdmin() {
   const [menuItems, setMenuItems] = useState([]);
 
+  const fetchMenuItems = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8889/auth/getmenutems', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMenuItems(response.data);
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8889/auth/getmenutems', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setMenuItems(response.data);
-      } catch (error) {
-        console.error('Error fetching menu items:', error);
-      }
-    };
+    
     fetchMenuItems();
   }, []);
 
- 
+  const editstatus0 = async (id) => {
+    try{
+      const rs = await axios.put(`http://localhost:8889/auth/monusstatus/${id}`, {
+        status: 0
+      })
+      console.log(rs.data)
+      alert('ทำการลดสินค้าแล้ว')
+      fetchMenuItems()
+    }catch(err){
+      console.error(err)
+    }
+  }
+
+  const editstatus1 = async (id) => {
+    try{
+      const rs = await axios.put(`http://localhost:8889/auth/monusstatus/${id}`, {
+        status: 1
+      })
+      console.log(rs.data)
+      alert('ทำการเพิ่มสินค้าแล้ว')
+      fetchMenuItems()
+    }catch(err){
+      console.error(err)
+    }
+  }
+
+ const status = (item) => {
+  if(item.status === 0){
+    return(
+      <div className='w-32 text-center ml-auto  '>
+        <p className='bg-green-600 h-8 shadow-lg rounded-lg' onClick={() => editstatus1(item.id)}>เพิ่มเมนู</p>
+      </div>
+    )
+  }else{
+    return(
+      <div className='w-32 text-center ml-auto  '>
+        <p className='bg-red-500 h-8 shadow-lg rounded-lg' onClick={() => editstatus0(item.id)}>เมนูหมด</p>
+      </div>
+    )
+  }
+ }
 
   return (
     <div className="container mx-auto p-4">
@@ -42,6 +84,7 @@ export default function HomeAdmin() {
             </div>
           </div>
           </Link>
+          {status(item)}
         </div>
       ))}
     </div>

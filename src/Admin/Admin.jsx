@@ -75,11 +75,11 @@ export default function ProductForm() {
       
       <label className="form-control w-full">
         <div className="label">
-          <span className="label-text">Name</span>
+          <span className="label-text">ชื่อเมนู</span>
         </div>
         <input
           type="text"
-          placeholder="Type here"
+          // placeholder="Type here"
           className="input input-bordered w-full"
           name="ItemName"
           value={input.ItemName}
@@ -89,11 +89,11 @@ export default function ProductForm() {
 
       <label className="form-control w-full">
         <div className="label">
-          <span className="label-text">Price</span>
+          <span className="label-text">ราคา</span>
         </div>
         <input
           type="number"
-          placeholder="Type here"
+          // placeholder="Type here"
           className="input input-bordered w-full"
           name="price"
           value={input.price}
@@ -103,11 +103,11 @@ export default function ProductForm() {
 
       <label className="form-control w-full">
         <div className="label">
-          <span className="label-text">Description</span>
+          <span className="label-text">รายละเอียด</span>
         </div>
         <input
           type="text"
-          placeholder="Type here"
+          // placeholder="Type here"
           className="input input-bordered w-full"
           name="description"
           value={input.description}
@@ -116,7 +116,7 @@ export default function ProductForm() {
       </label>
 
       <div className="mb-4">
-        <label htmlFor="file" className="block text-sm font-medium text-gray-700">File</label>
+        <label htmlFor="file" className="block text-sm font-medium text-gray-700">รูปภาพ</label>
         <input
           type="file"
           id="file"
@@ -128,7 +128,7 @@ export default function ProductForm() {
 
       {imageUrl && <img src={imageUrl} alt="Selected" className="mb-4" />}
 
-      <button type="submit" className="btn btn-primary">Submit</button>
+      <button type="submit" className="btn btn-primary">ยืนยัน</button>
     </form>
   );
 }

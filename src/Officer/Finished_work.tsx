@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, useLocation } from 'react-router-dom'; 
 
 function Finished_work() {
     const [order, setOrder] = useState([]);
     const navigate = useNavigate(); 
+    const locations = useLocation()
+    const ps = locations.state.p
   
     useEffect(() => {
       const ShowAlldata = async () => {
@@ -32,15 +34,29 @@ function Finished_work() {
     const LinkFinished = () => {
       navigate('/')
     }
+
+    const devorder = () => {
+      if(ps === 25){
+        return(
+          <div>
+            <h1 className="text-2xl font-bold mb-4">งานที่เส็จแล้วทั้งหมด</h1>
+          </div>
+        )
+      }else{
+        return(
+          <div>
+            <button className='btn btn-warning text-slate-950' onClick={LinkFinished}>งานที่ยังไม่เส็จ</button>
+            <button className="btn btn-success">งานที่เส็จแล้ว</button>
+          </div>
+        )
+      }
+    }
   
     return (
       <div className="text-center mx-auto max-w-4xl p-6">
-      <h1 className="text-2xl font-bold mb-4">งานทั้งหมด</h1>
+      {/* <h1 className="text-2xl font-bold mb-4">งานทั้งหมด</h1> */}
   
-      <div>
-          <button className='btn btn-warning text-slate-950' onClick={LinkFinished}>งานที่ยังไม่เส็จ</button>
-          <button className="btn btn-success">งานที่เส็จแล้ว</button>
-      </div>
+      {devorder()}
       <div className="space-y-4 text-left mt-10">
           {pendingBookings.map((orders) => (
               <div

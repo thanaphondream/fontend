@@ -112,12 +112,15 @@ const Already_Shipped = () => {
                         <hr className="mb-6" />
                         <p className='text-xl font-bold text-center'>หลักฐานการเข้ารับ</p>
                         <div className='mb-6 p-4 bg-gray-50 rounded-lg shadow-sm mt-8'>
-                            <p>ชื่อผู้รับ:  {orderData?.Payment[0]?.Delivery[0].name}</p>
-                            <p>รายระเอียด:  {orderData?.Payment[0]?.Delivery[0].Note}</p>
+                            <p>ผู้รับแทนหากมี:  {orderData?.Payment[0]?.Delivery[0].Note}</p>
                         </div>
                         <div>
                             <p className='text-xl font-bold text-center'>รูปภาพการเข้ารับ</p>
                             <img src={orderData?.Payment[0]?.Delivery[0].image} alt="" className='mt-8 w-[50%] h-[50%] mr-auto ml-auto'/>
+                        </div>
+                        <div>
+                            <p className='text-xl font-bold text-center'>รูปภาพรับเงิน</p>
+                            <img src={orderData?.Payment[0]?.Delivery[0].imgpay} alt="" className='mt-8 w-[50%] h-[50%] mr-auto ml-auto'/>
                         </div>
                     </div>
                     <div className="text-center mt-10">

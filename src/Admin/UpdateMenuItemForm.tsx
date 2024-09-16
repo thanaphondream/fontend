@@ -85,7 +85,7 @@ const FileInputComponent = () => {
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Update Menu Item</h2>
+      <h2 className="text-2xl font-semibold mb-4">อัพเดพเมนู</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="ItemName" className="block text-sm font-medium text-gray-700">ชื่อเมนู</label>
@@ -123,7 +123,7 @@ const FileInputComponent = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="file" className="block text-sm font-medium text-gray-700">File</label>
+          <label htmlFor="file" className="block text-sm font-medium text-gray-700">รูปภาพ</label>
           <input
             type="file"
             id="file"
@@ -139,13 +139,13 @@ const FileInputComponent = () => {
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Update
+            อัพเดพ
           </button>
           <Link
             to="/"
             className="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
           >
-            Cancel
+            ยกเลิก
           </Link>
         </div>
       </form>

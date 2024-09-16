@@ -29,6 +29,7 @@ import Already from '../Admin/Already';
 import Home from '../layout/Home';
 import Cancel from '../Admin/Cancel';
 import Pay from '../layout/PaymentForm/Pay';
+import OrderCancel from '../Admin/OrderCancel';
 
 const guestRouter = createBrowserRouter([
   {
@@ -89,7 +90,10 @@ const adminRouter = createBrowserRouter([
       { path: '/updaterole', element: <UserUpdaterole/>},
       { path: '/confirmorder', element: <ConfirmOrder/>},
       { path: '/already', element: <Already/>},
-      { path: '/cancel', element: <Cancel/>}
+      { path: '/cancel', element: <Cancel/>},
+      { path: '/finishedWork', element: <Finished_work/>},
+      { path: '/ordercancel', element: <OrderCancel/>},
+      { path: '/alreadyshipped', element: <Already_Shipped/>},
     ]
   }
 ]);
@@ -108,7 +112,8 @@ const OfficerRouter = createBrowserRouter([
       { path: '/delivery', element: <FoodDelivery/>},
       { path: '/confirm', element: <ConfirmDelivery/>},
       { path: '/finishedWork', element: <Finished_work/>},
-      { path: '/alreadyshipped', element: <Already_Shipped/>}
+      { path: '/alreadyshipped', element: <Already_Shipped/>},
+      { path: '/cancel', element: <Cancel/>},
     ]
   }
 ]);

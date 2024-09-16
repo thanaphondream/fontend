@@ -19,7 +19,7 @@ function Grach() {
   const [mygrachs, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null); // State to store selected date
+  const [selectedDate, setSelectedDate] = useState(null); 
 
   useEffect(() => {
     const fetchData = async () => {

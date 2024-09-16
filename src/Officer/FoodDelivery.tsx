@@ -29,6 +29,10 @@ function FoodDelivery() {
         navigate('/confirm', { state: { paymentids, orderId }})
     }
 
+    const LinkCencel = () => {
+        navigate('/cancel', {state: { orderData }})
+    }
+
     return (
         <div className="flex items-center justify-center mt-10 w-[80rem]">
             {orderData ? (
@@ -110,6 +114,7 @@ function FoodDelivery() {
                     </div>
                     <div className="text-center mt-10">
                         <hr className="mb-6" />
+                        <hr />
                         <button className="bg-cyan-500 text-white w-[25%] h-14 rounded-md shadow-lg hover:bg-cyan-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onClick={Linkconfirm}>
                             ไปหน้าถัดไป
                         </button>

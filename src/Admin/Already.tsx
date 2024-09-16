@@ -48,7 +48,7 @@ function Already() {
             {orderData ? (
                 <div className="bg-white shadow-md rounded-lg p-8 w-full">
                     <div className="text-center mb-6">
-                        <h1 className="text-2xl font-bold">รายการจัดส่ง</h1>
+                        <h1 className="text-2xl font-bold">รับรายการการสั่งซื้อ</h1>
                     </div>
                     <h2 className="text-lg font-semibold mb-4">ชื่อคุณ: {orderData?.Payment[0]?.user?.username}</h2>
                     <p className="mb-4">
@@ -132,12 +132,12 @@ function Already() {
                     </div>
                     <div className="text-center mt-10">
                         <hr className="mb-6" />
-                        <button
+                        {/* <button
                             className="bg-red-600 text-white w-[25%] h-14 rounded-md shadow-lg hover:bg-cyan-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
                             onClick={LinkCencel}
                         >
                            ยกเลิกสินค้า
-                        </button>
+                        </button> */}
                         <button
                             className="bg-cyan-500 text-white w-[25%] h-14 rounded-md shadow-lg hover:bg-cyan-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
                             onClick={OrderFnstatus}

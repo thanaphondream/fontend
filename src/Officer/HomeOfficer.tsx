@@ -30,7 +30,7 @@ function HomeOfficer() {
   const pendingBookings = order.filter((bk) => bk.status === 'กำลังจัดส่ง');
 
   const LinkFinished = () => {
-    navigate('/finishedWork')
+    navigate('/finishedWork', {state: { p: 22}})
   }
 
   return (

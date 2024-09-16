@@ -181,6 +181,21 @@ function UserProduck() {
     }
   }
 
+  const Deliverys = (purchase) => {
+    // purchase.Delivery.map(m => {
+    //   console.log(m.image)
+    // })
+    return(
+      <div>
+        { purchase.Delivery.map(m => (
+          <div>
+               <img src={m?.Delivery?.image} alt="" />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col justify-center items-center py-10">
       <h2 className="text-2xl font-semibold mb-4">ประวัติการซื้อสินค้า</h2>
@@ -223,6 +238,9 @@ function UserProduck() {
                   </ul>
                   <div className="mt-4">
                     {statusorderFn(purchase)}
+                    <div>
+                      {Deliverys(purchase)}
+                    </div>
                   </div>
                 </div>
                     {slipbutton(purchase)}

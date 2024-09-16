@@ -41,20 +41,20 @@ export default function HeaderAdmin() {
     <header className="bg-gray-800 text-white py-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-xl font-bold cursor-pointer" onClick={hdlHome}>
-          ADMIN
+          เจ้าของร้าน
         </div>
         <nav className="ml-auto flex space-x-4">
         <a className="hover:text-gray-400 cursor-pointer" onClick={hdlorderconfirm}>
-            OrderConfirm
+            ยืนยันคำสั่งซื้อ
           </a>
           <a className="hover:text-gray-400 cursor-pointer" onClick={hdlProduct}>
-            Add Product
+            เพิ่มเมนู
           </a>
-          <a className="hover:text-gray-400 cursor-pointer" onClick={hdRole}>
+          {/* <a className="hover:text-gray-400 cursor-pointer" onClick={hdRole}>
             roleUpdate
-          </a>
+          </a> */}
           <a className="hover:text-gray-400 cursor-pointer" onClick={hdMyGrach}>
-            Grach
+            ดูยอดขาย
           </a>
           {user?.id && (
             <Link
@@ -62,7 +62,7 @@ export default function HeaderAdmin() {
               onClick={hdlLogout}
               className="hover:text-gray-400 cursor-pointer text-red-600"
             >
-              Logout
+              ล็อกเอาท์
             </Link>
           )}
           {/* {finalNav.map(el => (

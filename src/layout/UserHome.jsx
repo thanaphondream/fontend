@@ -87,38 +87,51 @@ export default function UserHome() {
     }
   };
 
-
+  const status = (item) => {
+    if (item.status === 0) {
+      return (
+        <div>
+          <img src={item.file} alt="" />
+          <h3 className="product-title">{item.ItemName}</h3>
+          <p className="product-price">ราคา: {item.price} บาท</p>
+          <p className='text-red-600 font-semibold'>ก๋วยเตี๋ยวหมดแล้ว</p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Link to={`/product/${item.id}`}>
+            <img src={item.file} alt="" />
+            <h3 className="product-title">{item.ItemName}</h3>
+            <p className="product-price">ราคา: {item.price} บาท</p>
+          </Link>
+          <br />
+          <button
+            className="btn btn-accent"
+            onClick={() => handleAddToCart(item.id, item.price)}
+          >
+            <box-icon name="cart-add"></box-icon>
+            เพิ่มลงตะกร้า
+          </button>
+          <div className="button-group"></div>
+        </div>
+      );
+    }
+  };
+  
   return (
     <div>
       <Strer />
       <div className="user-home-container">
         {menutems.map((item) => (
           <div key={item.id} className="product-item">
-            <Link to={`/product/${item.id}`}>
-              <img src={item.file} alt="" />
-              <h3 className="product-title">{item.ItemName}</h3>
-              <p className="product-price">ราคา: {item.price} บาท</p>
-            </Link>
-            <br />
-            {/* <Link
-              to={`/payment/${item.id}/Fs2224SbaRel2Ncvn123444Bncceddd101Mx12Z01`}
-              className="btn btn-outline btn-success">
-                <box-icon name='money-withdraw'></box-icon>
-              <button>สั่งซื้อ</button>
-            </Link> */}
-            <button className="btn btn-accent" onClick={() => handleAddToCart(item.id, item.price)}>
-            <box-icon name='cart-add' ></box-icon>
-              เพิ่มลงตะกร้า
-            </button>
-            <div className="button-group"></div>
+            {status(item)}
           </div>
         ))}
         <hr />
-        {/* <Link to={'/vvbbb'}>
-          <button>44555</button>
-        </Link> */}
       </div>
       <Prosterwash />
     </div>
   );
+  
 }

@@ -29,8 +29,8 @@ function Home() {
 
     const LinkLogin = () => {
       Swal.fire({
-        title: "คุณยังไม่เข้าสู้ระบบ!",
-        text: "กรุณาทำการล็อกอินเพื่อเข้าสู้ระบบหน่อยครับ",
+        title: "คุณยังไม่เข้าสู่ระบบ!",
+        text: "กรุณาทำการล็อกอินเพื่อเข้าสู่ระบบหน่อยครับ",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -47,8 +47,8 @@ function Home() {
     return (
         <div>
           <div className='text-center'>
-            <p>กรุณาข้อสู้ระบบเพื่อเป็นส้วนหนึ่งของเรา</p>
-            <Link to={`/loing`}><p className='text-cyan-600'>ล็อกอินเข้าสู้ระบบ</p></Link>
+            <p>กรุณาข้อสู่ระบบเพื่อเป็นส้วนหนึ่งของเรา</p>
+            <Link to={`/loing`}><p className='text-cyan-600'>ล็อกอินเข้าสู่ระบบ</p></Link>
           </div>
           <br />
             <Strer />
