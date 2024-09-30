@@ -110,7 +110,7 @@ export default function ProductDetail() {
   console.log("seif", product)
   return (
     <div className="product-detail-container">
-      <div className='imgs'>
+      <div className='imgs ml-56'>
         <img alt="" src={product.file} />
       </div>
       <div className="boxs border-sky-500">

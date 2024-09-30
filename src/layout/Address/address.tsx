@@ -212,7 +212,7 @@ const Address = () => {
                         />
                     </div>
                 ))}
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                     <label htmlFor="userId" className="mb-2 font-semibold">เลขชื่อ</label>
                     <input
                         type="text"
@@ -222,7 +222,7 @@ const Address = () => {
                         placeholder="OTHER"
                         className="p-2 border border-gray-300 rounded-md"
                     />
-                </div>
+                </div> */}
                 <div className="flex space-x-4">
                     <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">บันทึก</button>
                     <button type="button" onClick={handleGetCurrentPosition} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">เปิดตำแหน่งในเครื่อง</button>

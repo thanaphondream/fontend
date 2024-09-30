@@ -189,7 +189,11 @@ function UserProduck() {
       <div>
         { purchase.Delivery.map(m => (
           <div>
-               <img src={m?.Delivery?.image} alt="" />
+              <div className='flex'>
+              <img src={m?.image} alt="" />
+              <img src={m.imgpay} alt="" className='w-36' />
+              </div>
+              <p className='text-sky-400'>{m.Note || 'ส่งอาหารเรียบร้อยแล้ว'}</p>
           </div>
         ))}
       </div>
@@ -198,7 +202,7 @@ function UserProduck() {
 
   return (
     <div className="flex flex-col justify-center items-center py-10">
-      <h2 className="text-2xl font-semibold mb-4">ประวัติการซื้อสินค้า</h2>
+      <h2 className="text-2xl font-semibold mb-4">ประวัติการซื้ออาหาร</h2>
       <div className="container mx-auto mt-10 p-4 rounded-lg bg-white shadow-lg">
         {purchases.length > 0 ? (
           purchases.map((purchase) => (

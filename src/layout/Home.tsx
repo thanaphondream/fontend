@@ -44,32 +44,57 @@ function Home() {
       });
     };
 
+    const status = (item) => {
+      if (item.status === 0) {
+        return (
+          <div>
+            <img src={item.file} alt="" />
+            <h3 className="product-title">{item.ItemName}</h3>
+            <p className="product-price">ราคา: {item.price} บาท</p>
+            <p className='text-red-600 font-semibold'>ก๋วยเตี๋ยวหมดแล้ว</p>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+              <img src={item.file} alt="" />
+              <h3 className="product-title">{item.ItemName}</h3>
+              <p className="product-price">ราคา: {item.price} บาท</p>
+            <br />
+            <button
+              className="btn btn-accent"
+              onClick={LinkLogin}
+            >
+              <box-icon name="cart-add"></box-icon>
+              เพิ่มลงตะกร้า
+            </button>
+            <div className="button-group"></div>
+          </div>
+        );
+      }
+    };
+    
     return (
-        <div>
-          <div className='text-center'>
+      <div>
+         <div className='text-center'>
             <p>กรุณาข้อสู่ระบบเพื่อเป็นส้วนหนึ่งของเรา</p>
             <Link to={`/loing`}><p className='text-cyan-600'>ล็อกอินเข้าสู่ระบบ</p></Link>
           </div>
-          <br />
-            <Strer />
-            <div className="user-home-container">
-                {menutems.map((item) => (
-                    <div key={item.id} className="product-item" onClick={LinkLogin}>
-                            <img src={item.file} alt="" />
-                            <h3 className="product-title">{item.ItemName}</h3>
-                            <p className="product-price">ราคา: {item.price} บาท</p>
-                        <button className="btn btn-accent" onClick={LinkLogin}>
-                            <box-icon name='cart-add'></box-icon>
-                            เพิ่มลงตะกร้า
-                        </button>
-                        <div className="button-group"></div>
-                    </div>
-                ))}
-                <hr />
+        <Strer />
+        <div className="user-home-container">
+          {menutems.map((item) => (
+            <div key={item.id} className="product-item">
+              {status(item)}
             </div>
-            <Prosterwash />
+          ))}
+          <hr />
         </div>
+        <Prosterwash />
+      </div>
     );
-}
+    
+  }
+  
+
 
 export default Home;
