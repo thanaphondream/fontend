@@ -32,7 +32,7 @@ const CartOrders = () => {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPurchases(Cartorders.filter(cartorder => cartorder.id !== id));
-             window.location.reload();
+            //  window.location.reload();
             alert("Item deleted successfully");
         } catch (err) {
             console.error('Error deleting item:', err);
@@ -76,7 +76,7 @@ const CartOrders = () => {
             setPurchases(Cartorders.map(item =>
                 item.id === id ? { ...item, total: newTotal, all_price: newAllPrice } : item
             ));
-             window.location.reload();
+            //  window.location.reload();
         } catch (err) {
             console.error('Error updating cart:', err);
         }

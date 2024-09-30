@@ -8,7 +8,12 @@ function App() {
 
   if(loading) {
     return (
-      <p className="text-4xl text-primary"><span className="loading loading-bars loading-lg"></span></p>
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="text-center">
+          <p className="text-5xl font-bold text-slate-950 mb-4">กรุณารอสักครู่...</p>
+          <span className="loading loading-bars loading-lg text-slate-950"></span>
+        </div>
+      </div>
     )
   }
 

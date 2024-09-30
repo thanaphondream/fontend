@@ -81,7 +81,7 @@ export default function UserHome() {
       }
       cartShow()
 
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
