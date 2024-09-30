@@ -9,7 +9,7 @@ export default function HomeAdmin() {
   const fetchMenuItems = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8889/auth/getmenutems', {
+      const response = await axios.get('https://backend-olnc.onrender.com/auth/getmenutems', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMenuItems(response.data);
@@ -25,7 +25,7 @@ export default function HomeAdmin() {
 
   const editstatus0 = async (id) => {
     try{
-      const rs = await axios.put(`http://localhost:8889/auth/monusstatus/${id}`, {
+      const rs = await axios.put(`https://backend-olnc.onrender.com/auth/monusstatus/${id}`, {
         status: 0
       })
       console.log(rs.data)
@@ -38,7 +38,7 @@ export default function HomeAdmin() {
 
   const editstatus1 = async (id) => {
     try{
-      const rs = await axios.put(`http://localhost:8889/auth/monusstatus/${id}`, {
+      const rs = await axios.put(`https://backend-olnc.onrender.com/auth/monusstatus/${id}`, {
         status: 1
       })
       console.log(rs.data)

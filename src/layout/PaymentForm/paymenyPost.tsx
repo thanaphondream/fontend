@@ -38,7 +38,7 @@ const paymenyPost = (props) => {
         }else{
             try{
                 const { all_priceSum, totals } = allpost();
-                const rs = await axios.post('http://localhost:8889/order/orders', {
+                const rs = await axios.post('https://backend-olnc.onrender.com/order/orders', {
                     total_all: totals,
                     allprice: all_priceSum,
                     status: 'รอยืนยันการสั้ง',
@@ -51,7 +51,7 @@ const paymenyPost = (props) => {
                 
                 el.map(async(l) => {
                     console.log("el is : ", l, rs.data.order.id)
-                const rx = await axios.post('http://localhost:8889/order/ordercart',{
+                const rx = await axios.post('https://backend-olnc.onrender.com/order/ordercart',{
                     total: l.total, 
                     all_price: l.all_price,
                     status: 'ordercart',
@@ -77,7 +77,7 @@ const paymenyPost = (props) => {
                 mony = 'ชำระปลายทาง'
             }
 
-            const rspy = await axios.post('http://localhost:8889/payment/payments',{
+            const rspy = await axios.post('https://backend-olnc.onrender.com/payment/payments',{
                 userId: user,
                 amount: 1.0,
                 pay: payments.pay,
@@ -88,7 +88,7 @@ const paymenyPost = (props) => {
             setPayments(rspy.data)
             localStorage.setItem('loca', lo)
             const token = localStorage.getItem('token')
-            await axios.get(`http://localhost:8889/payment/linemenu/${rspy.data.payment.id}`,{
+            await axios.get(`https://backend-olnc.onrender.com/payment/linemenu/${rspy.data.payment.id}`,{
                 headers: { Authorization: `Bearer ${token}` }
             })
 
@@ -108,7 +108,7 @@ const paymenyPost = (props) => {
     const deletecart = async () => {
         try{
            el.map(async(l) => {
-            await axios.delete(`http://localhost:8889/cart/carts/${l.id}`)
+            await axios.delete(`https://backend-olnc.onrender.com/cart/carts/${l.id}`)
            })
         }catch(err){
             console.error(`เกิดข้อผิพลาด ${err}`)

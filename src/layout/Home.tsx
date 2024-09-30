@@ -14,7 +14,7 @@ function Home() {
     const fetchMenutems = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:8889/auth/getmenutems', {
+            const response = await axios.get('https://backend-olnc.onrender.com/auth/getmenutems', {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setMenutems(response.data);

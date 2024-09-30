@@ -69,7 +69,7 @@ function ConfirmDelivery() {
         formData.append('date', delivery.date);
 
         try {
-            const rs = await axios.post('http://localhost:8889/dlivery/dliverys', formData, {
+            const rs = await axios.post('https://backend-olnc.onrender.com/dlivery/dliverys', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                   },
@@ -91,7 +91,7 @@ function ConfirmDelivery() {
     };
 
     const OrderFnstatus = async () => {
-        await axios.put(`http://localhost:8889/order/orderUpstatus/${orderIds}`, {
+        await axios.put(`https://backend-olnc.onrender.com/order/orderUpstatus/${orderIds}`, {
             status: 'จัดส่งเรียบร้อย'
         });
     };

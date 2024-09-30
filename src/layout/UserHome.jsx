@@ -15,17 +15,17 @@ export default function UserHome() {
     const fetchMenutems = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8889/auth/getmenutems', {
+        const response = await axios.get('https://backend-olnc.onrender.com/auth/getmenutems', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMenutems(response.data);
 
-        const rsuser = await axios.get('http://localhost:8889/auth/user', {
+        const rsuser = await axios.get('https://backend-olnc.onrender.com/auth/user', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(rsuser.data)
 
-        const rscarts = await axios.get('http://localhost:8889/cart/carts/', {
+        const rscarts = await axios.get('https://backend-olnc.onrender.com/cart/carts/', {
           headers: { Authorization: `Bearer ${token}`},
         })
         setCarts(rscarts.data)
@@ -43,7 +43,7 @@ export default function UserHome() {
     const cartShow = async () => {
       try{
         const token = localStorage.getItem('token');
-        const rscarts = await axios.get('http://localhost:8889/cart/carts/', {
+        const rscarts = await axios.get('https://backend-olnc.onrender.com/cart/carts/', {
           headers: { Authorization: `Bearer ${token}`},
         })
         setCarts(rscarts.data)
@@ -63,12 +63,12 @@ export default function UserHome() {
         const nexttotal = cartItimechix?.total + 1;
         const nextprice = cartItimechix?.all_price + itemprice;
         console.log(nextprice, nexttotal)
-        await axios.put(`http://localhost:8889/cart/carts/${cartItimechix.id}`,{
+        await axios.put(`https://backend-olnc.onrender.com/cart/carts/${cartItimechix.id}`,{
           total : nexttotal,
           all_price: nextprice
         })
       }else{
-        const response = await axios.post('http://localhost:8889/cart/carts/', { 
+        const response = await axios.post('https://backend-olnc.onrender.com/cart/carts/', { 
           total: 1,
           all_price: itemprice,
           userId: user.id,

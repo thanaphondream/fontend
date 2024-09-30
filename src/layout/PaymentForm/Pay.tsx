@@ -36,7 +36,7 @@ function Pay() {
       formData.append('paymentId', pay.paymentId);
       formData.append('image', image);
 
-      await axios.post('http://localhost:8889/payment/pay', formData, {
+      await axios.post('https://backend-olnc.onrender.com/payment/pay', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -51,7 +51,7 @@ function Pay() {
 
   const payupdateFn = async () => {
     try {
-      await axios.put(`http://localhost:8889/payment/payments/${Ids}`, {
+      await axios.put(`https://backend-olnc.onrender.com/payment/payments/${Ids}`, {
         pay: 'โอนจ่าย',
         status: 'โอนจ่ายแล้ว'
       });

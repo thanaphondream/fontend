@@ -23,7 +23,7 @@ function Already() {
 
 
     const OrderFnstatus = async () => {
-        await axios.put(`http://localhost:8889/order/orderUpstatus/${orderData.id}`,{
+        await axios.put(`https://backend-olnc.onrender.com/order/orderUpstatus/${orderData.id}`,{
             status: 'กำลังจัดส่ง'
         })
         Swal.fire({

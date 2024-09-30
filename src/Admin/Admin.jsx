@@ -47,7 +47,7 @@ export default function ProductForm() {
       formData.append('description', input.description);
       formData.append('image', input.file);
       const token = localStorage.getItem('token');
-      const rs = await axios.post('http://localhost:8889/auth/menutems', formData ,{
+      const rs = await axios.post('https://backend-olnc.onrender.com/auth/menutems', formData ,{
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

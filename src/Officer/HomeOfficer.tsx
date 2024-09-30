@@ -10,7 +10,7 @@ function HomeOfficer() {
     const ShowAlldata = async () => {
       try {
         const token = localStorage.getItem('token');
-        const rsorder = await axios.get('http://localhost:8889/order/orderofficer', {
+        const rsorder = await axios.get('https://backend-olnc.onrender.com/order/orderofficer', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

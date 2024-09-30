@@ -11,7 +11,7 @@ function UserUpdaterole() {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8889/auth/usershowall', {
+                const response = await axios.get('https://backend-olnc.onrender.com/auth/usershowall', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setUsers(response.data);
@@ -34,13 +34,13 @@ function UserUpdaterole() {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:8889/auth/updaterole/${selectedUserId}`, {
+            await axios.put(`https://backend-olnc.onrender.com/auth/updaterole/${selectedUserId}`, {
                 role: role
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            const response = await axios.get('http://localhost:8889/auth/usershowall', {
+            const response = await axios.get('https://backend-olnc.onrender.com/auth/usershowall', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(response.data);

@@ -14,12 +14,12 @@ const Profile = () => {
     const profileShow = async () => {
       try {
         const token = localStorage.getItem('token');
-        const rs = await axios.get('http://localhost:8889/auth/profileuser', {
+        const rs = await axios.get('https://backend-olnc.onrender.com/auth/profileuser', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(rs.data);
 
-        const rsuser = await axios.get('http://localhost:8889/auth/user', {
+        const rsuser = await axios.get('https://backend-olnc.onrender.com/auth/user', {
           headers: { Authorization: `Bearer ${token}` },
         });
        
@@ -45,7 +45,7 @@ const Profile = () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.put(
-          `http://localhost:8889/auth/profileupdatebg/${profile.id}`,
+          `https://backend-olnc.onrender.com/auth/profileupdatebg/${profile.id}`,
           formData,
           {
             headers: {
@@ -74,7 +74,7 @@ const Profile = () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.put(
-          `http://localhost:8889/auth/profileupdate/${profile.id}`,
+          `https://backend-olnc.onrender.com/auth/profileupdate/${profile.id}`,
           formData,
           {
             headers: {

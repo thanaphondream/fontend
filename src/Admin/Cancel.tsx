@@ -24,7 +24,7 @@ function Cancel() {
 
     const cancelmenu = async () => {
         try {
-            await axios.post('http://localhost:8889/dlivery/cancel', cancels);
+            await axios.post('https://backend-olnc.onrender.com/dlivery/cancel', cancels);
             await orderstatus();
             navigate('/');
         } catch (error) {
@@ -34,7 +34,7 @@ function Cancel() {
 
     const orderstatus = async () => {
         try {
-            await axios.put(`http://localhost:8889/order/orderUpstatus/${orders?.id}`, {
+            await axios.put(`https://backend-olnc.onrender.com/order/orderUpstatus/${orders?.id}`, {
                 status: 'ยกเลิกเมนู'
             });
         } catch (error) {

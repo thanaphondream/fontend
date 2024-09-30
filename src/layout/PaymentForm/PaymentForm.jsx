@@ -28,12 +28,12 @@ const PaymentForm = () => {
       const Data_all = async () => {
         try{
           const token = localStorage.getItem('token')
-          const rsUser = await axios.get('http://localhost:8889/auth/user', {
+          const rsUser = await axios.get('https://backend-olnc.onrender.com/auth/user', {
             headers: { Authorization: `Bearer ${token}` },
           })
           setUser(rsUser.data)
   
-          const rslocation = await axios.get('http://localhost:8889/location/locationid', {
+          const rslocation = await axios.get('https://backend-olnc.onrender.com/location/locationid', {
             headers: { Authorization: `Bearer ${token}` },
           })
           setLocations(rslocation.data)
@@ -103,7 +103,7 @@ const PaymentForm = () => {
         console.log("fafa",los)
         if(los){
           const token = localStorage.getItem('token')
-        const rs = await axios.get(`http://localhost:8889/location/location/${los}`, {
+        const rs = await axios.get(`https://backend-olnc.onrender.com/location/location/${los}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         setLocationId(rs.data)
@@ -111,7 +111,7 @@ const PaymentForm = () => {
 
         }else{
         const token = localStorage.getItem('token')
-        const rs = await axios.get(`http://localhost:8889/location/location/${locationIds}`, {
+        const rs = await axios.get(`https://backend-olnc.onrender.com/location/location/${locationIds}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         setLocationId(rs.data)
@@ -142,14 +142,14 @@ const PaymentForm = () => {
         });
       }else{
       try{
-        const rs = await axios.post('http://localhost:8889/order/orders', {
+        const rs = await axios.post('https://backend-olnc.onrender.com/order/orders', {
           total_all: 1,
           allprice: product.price,
           status: 'รอยืนยันการสั้ง',
           date: new Date(),
         })
   
-        await axios.post('http://localhost:8889/order/ordercart', {
+        await axios.post('https://backend-olnc.onrender.com/order/ordercart', {
           total: 1,
           all_price: product.price,
           status: 'ordercart',
@@ -158,7 +158,7 @@ const PaymentForm = () => {
           orderId: rs.data.order.id
         })
   
-        const rspy = await axios.post('http://localhost:8889/payment/payments', {
+        const rspy = await axios.post('https://backend-olnc.onrender.com/payment/payments', {
           userId: user1,
           amount: 1.0,
           pay: 'paydelivery',
@@ -169,7 +169,7 @@ const PaymentForm = () => {
         setPayments(rspy.data)
         localStorage.setItem('loca', lo)
         const token = localStorage.getItem('token')
-        await axios.get(`http://localhost:8889/payment/linemenu/${rspy.data.payment.id}`,{
+        await axios.get(`https://backend-olnc.onrender.com/payment/linemenu/${rspy.data.payment.id}`,{
             headers: { Authorization: `Bearer ${token}` }
         })
         navigate('/')

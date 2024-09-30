@@ -24,12 +24,12 @@ const PaymentCart = () => {
     const Data_all = async () => {
       try{
         const token = localStorage.getItem('token')
-        const rsUser = await axios.get('http://localhost:8889/auth/user', {
+        const rsUser = await axios.get('https://backend-olnc.onrender.com/auth/user', {
           headers: { Authorization: `Bearer ${token}` },
         })
         setUser(rsUser.data)
 
-        const rslocation = await axios.get('http://localhost:8889/location/locationid', {
+        const rslocation = await axios.get('https://backend-olnc.onrender.com/location/locationid', {
           headers: { Authorization: `Bearer ${token}` },
         })
         setLocations(rslocation.data)
@@ -99,7 +99,7 @@ const PaymentCart = () => {
       console.log("fafa",los)
       if(los){
         const token = localStorage.getItem('token')
-      const rs = await axios.get(`http://localhost:8889/location/location/${los}`, {
+      const rs = await axios.get(`https://backend-olnc.onrender.com/location/location/${los}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       setLocationId(rs.data)
@@ -114,7 +114,7 @@ const PaymentCart = () => {
       // }
       }else{
       const token = localStorage.getItem('token')
-      const rs = await axios.get(`http://localhost:8889/location/location/${locationIds}`, {
+      const rs = await axios.get(`https://backend-olnc.onrender.com/location/location/${locationIds}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const user1 = localStorage.getItem('user')

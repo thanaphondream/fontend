@@ -22,19 +22,19 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:8889/auth/getproduct/${id}`, {
+        const response = await axios.get(`https://backend-olnc.onrender.com/auth/getproduct/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setProduct(response.data);
 
-        const rs = await axios.get('http://localhost:8889/auth/user', {
+        const rs = await axios.get('https://backend-olnc.onrender.com/auth/user', {
           headers: { Authorization: `Bearer ${token}`}
         })
 
         setUser(rs.data)
         console.log(rs.data)
 
-        const rsreviews = await axios.get(`http://localhost:8889/auth/reviewproduct/${id}`,{
+        const rsreviews = await axios.get(`https://backend-olnc.onrender.com/auth/reviewproduct/${id}`,{
           headers: { Authorization: `Bearer ${token}` }
         })
         setReviews(rsreviews.data)
@@ -80,7 +80,7 @@ export default function ProductDetail() {
     }else{
       try {
         review.userId = user.id
-        const response = await axios.post('http://localhost:8889/auth/reviews', review, {
+        const response = await axios.post('https://backend-olnc.onrender.com/auth/reviews', review, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         console.log('Review submitted:', response.data);

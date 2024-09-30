@@ -18,7 +18,7 @@ const FileInputComponent = () => {
     const fetchMenuItem = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:8889/auth/getproduct/${id}`, {
+        const response = await axios.get(`https://backend-olnc.onrender.com/auth/getproduct/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setItem(response.data);
@@ -70,7 +70,7 @@ const FileInputComponent = () => {
 
 
       const token = localStorage.getItem('token');
-      const rs = await axios.put(`http://localhost:8889/auth/munus/${id}`, formData, {
+      const rs = await axios.put(`https://backend-olnc.onrender.com/auth/munus/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

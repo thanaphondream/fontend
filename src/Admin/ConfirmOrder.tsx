@@ -18,7 +18,7 @@ function ConfirmOrder() {
                     return;
                 }
 
-                const response = await axios.get('http://localhost:8889/order/orderofficer', {
+                const response = await axios.get('https://backend-olnc.onrender.com/order/orderofficer', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setOrder(response.data);

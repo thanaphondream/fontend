@@ -20,13 +20,13 @@ export default function LoginForm() {
     try {
       e.preventDefault()
       // validation
-      const rs = await axios.post('http://localhost:8889/auth/login', input)
+      const rs = await axios.post('https://backend-olnc.onrender.com/auth/login', input)
       // console.log(rs.data.token)
       // console.log(rs)
       // console.log("sfsf",rs.data)
       localStorage.setItem('token', rs.data.token)
       
-      const rs1 = await axios.get('http://localhost:8889/auth/me', {
+      const rs1 = await axios.get('https://backend-olnc.onrender.com/auth/me', {
         headers: { Authorization: `Bearer ${rs.data.token}` }
       })
       console.log(rs1.data)

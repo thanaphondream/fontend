@@ -30,7 +30,7 @@ export default function RegisterForm() {
           icon: "question"
         });
       }
-      const rs = await axios.post('http://localhost:8889/auth/register', input)
+      const rs = await axios.post('https://backend-olnc.onrender.com/auth/register', input)
       console.log(rs)
       if(rs.status === 200) {
         Swal.fire({

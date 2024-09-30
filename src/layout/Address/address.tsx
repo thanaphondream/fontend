@@ -40,7 +40,7 @@ const Address = () => {
         const fetchProvinces = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8889/location/provinces', {
+                const response = await axios.get('https://backend-olnc.onrender.com/location/provinces', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setProvinces(response.data);
@@ -57,7 +57,7 @@ const Address = () => {
             if (selectedProvince) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:8889/location/amphures?province_id=${selectedProvince}`, {
+                    const response = await axios.get(`https://backend-olnc.onrender.com/location/amphures?province_id=${selectedProvince}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setAmphures(response.data);
@@ -76,7 +76,7 @@ const Address = () => {
         const fetchUser = async () => {
           try{
             const token1 = localStorage.getItem('token')
-            const response01 = await axios.get(`http://localhost:8889/auth/user`,{
+            const response01 = await axios.get(`https://backend-olnc.onrender.com/auth/user`,{
               headers: {Authorization: `Bearer ${token1}`}
             })
             setUser(response01.data)
@@ -93,7 +93,7 @@ const Address = () => {
             if (selectedAmphure) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:8889/location/districts?amphure_id=${selectedAmphure}`, {
+                    const response = await axios.get(`https://backend-olnc.onrender.com/location/districts?amphure_id=${selectedAmphure}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setDistricts(response.data);
@@ -129,7 +129,7 @@ const Address = () => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post('http://localhost:8889/location/locations', formData, {
+            const response = await axios.post('https://backend-olnc.onrender.com/location/locations', formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log(response.data)

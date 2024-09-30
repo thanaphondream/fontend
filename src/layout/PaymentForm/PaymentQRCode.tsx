@@ -9,7 +9,7 @@ const CreatePaymentForm = () => {
     e.preventDefault();
     try {
         const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:8889/auth/create-payment', { amount },
+      const response = await axios.post('https://backend-olnc.onrender.com/auth/create-payment', { amount },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(response.data); // Log created payment data

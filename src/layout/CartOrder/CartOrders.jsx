@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
-const API_BASE_URL = 'http://localhost:8889/cart/carts/'; 
+const API_BASE_URL = 'https://backend-olnc.onrender.com/cart/carts/'; 
 
 const CartOrders = () => {
     const [Cartorders, setPurchases] = useState([]);
@@ -28,7 +28,7 @@ const CartOrders = () => {
     const handleDelete = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8889/cart/carts/${id}`, {
+            await axios.delete(`https://backend-olnc.onrender.com/cart/carts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPurchases(Cartorders.filter(cartorder => cartorder.id !== id));
@@ -66,7 +66,7 @@ const CartOrders = () => {
                 newAllPrice = currentItem.all_price;
             }
     
-            const response = await axios.put(`http://localhost:8889/cart/carts/${id}`, {
+            const response = await axios.put(`https://backend-olnc.onrender.com/cart/carts/${id}`, {
                 total: newTotal,
                 all_price: newAllPrice,
             });
@@ -166,7 +166,7 @@ const CartOrders = () => {
 
 export default CartOrders;
 
-// const api = 'http://localhost:8889/cart/carts/'
+// const api = 'https://backend-olnc.onrender.com/cart/carts/'
 // const token = localStorage.getItem('token');
 //     const response = await axios.get(api, {
 //         headers: { Authorization: `Bearer ${token}` },
