@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://thanaphondream.github.io/fontend/",
+  "homepage": "https://thanaphondream.github.io/Half_Full",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
